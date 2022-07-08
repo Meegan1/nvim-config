@@ -30,10 +30,18 @@ packer.init({
 	},
 })
 
-return require('packer').startup(function()
+require('packer').startup(function()
   -- Packer can manage itself
   use 'wbthomason/packer.nvim'
   use({ "nvim-lua/plenary.nvim"})
   use { "EdenEast/nightfox.nvim", tag = "v1.0.0" } -- Packer
+  use 'williamboman/nvim-lsp-installer'
+  use 'neovim/nvim-lspconfig'
+  use 'ms-jpq/coq_nvim'
+  use 'ms-jpq/coq.artifacts'
+  use 'ms-jpq/coq.thirdparty'
 
 end)
+
+
+require 'plugins/lsp'
