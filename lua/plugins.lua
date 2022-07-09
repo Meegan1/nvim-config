@@ -40,8 +40,16 @@ require('packer').startup(function()
   use 'ms-jpq/coq_nvim'
   use 'ms-jpq/coq.artifacts'
   use 'ms-jpq/coq.thirdparty'
+  use {
+    'kyazdani42/nvim-tree.lua',
+    requires = {
+      'kyazdani42/nvim-web-devicons', -- optional, for file icons
+    },
+    tag = 'nightly' -- optional, updated every week. (see issue #1193)
+  }
 
 end)
 
 
 require 'plugins/lsp'
+require 'plugins/nvim-tree'

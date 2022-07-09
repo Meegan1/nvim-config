@@ -1,4 +1,6 @@
-require("nvim-lsp-installer").setup {}
+require("nvim-lsp-installer").setup {
+  automatic_installation = true,
+}
 local lsp = require "lspconfig"
 local coq = require "coq"
 
@@ -46,6 +48,10 @@ lsp.sumneko_lua.setup(coq.lsp_ensure_capabilities({
       }
     }
   }
+}))
+
+lsp.tsserver.setup(coq.lsp_ensure_capabilities({
+  on_attach = on_attach,
 }))
 
 vim.schedule(function()
