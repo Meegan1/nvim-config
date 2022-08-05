@@ -51,6 +51,10 @@ require('packer').startup(function()
     "iamcco/markdown-preview.nvim",
     run = function() vim.fn["mkdp#util#install"]() end,
   }
+  use 'jenterkin/vim-autosource'
+  use {
+    "windwp/nvim-autopairs",
+  }
 
 end)
 
