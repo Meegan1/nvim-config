@@ -47,6 +47,14 @@ require('packer').startup(function()
     },
     tag = 'nightly' -- optional, updated every week. (see issue #1193)
   }
+  use {
+    "iamcco/markdown-preview.nvim",
+    run = function() vim.fn["mkdp#util#install"]() end,
+  }
+  use 'jenterkin/vim-autosource'
+  use {
+    "windwp/nvim-autopairs",
+  }
 
 end)
 
