@@ -55,9 +55,18 @@ require('packer').startup(function()
   use {
     "windwp/nvim-autopairs",
   }
-
+  use {
+    'nvim-telescope/telescope.nvim', tag = '0.1.0',
+    requires = { {'nvim-lua/plenary.nvim'} }
+  }
+  use {'nvim-telescope/telescope-fzf-native.nvim', run = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build' }
+  use {
+    'romgrk/barbar.nvim',
+    requires = {'kyazdani42/nvim-web-devicons'}
+  }
 end)
 
 
 require 'plugins/lsp'
 require 'plugins/nvim-tree'
+require 'plugins/telescope'

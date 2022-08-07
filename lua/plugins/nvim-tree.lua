@@ -1,5 +1,6 @@
 require("nvim-tree").setup({
   filters = {
-    dotfiles = true,
-  }
+    dotfiles = false,
+  },
+  open_on_tab = true
 })
