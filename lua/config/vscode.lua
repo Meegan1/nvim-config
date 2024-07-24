@@ -1,7 +1,3 @@
--- vim.keymap.set({ "n", "x", "i" }, "gb", function()
---   require("vscode-multi-cursor").addSelectionToNextFindMatch()
--- end)
-
 local vscode = require('vscode')
 
 vim.keymap.set('n', '<Leader>p', function()
@@ -31,14 +27,6 @@ end, { remap = true, silent = true })
 vim.keymap.set('n', 'za', function()
   vscode.call('editor.toggleFold')
 end, { remap = true, silent = true })
-
-function MoveCursor(direction)
-  if vim.fn.reg_recording() == '' and vim.fn.reg_executing() == '' then
-    return 'g' .. direction
-  else
-    return direction
-  end
-end
 
 -- Move cursor up and down above folds
 vim.keymap.set('n', 'j', 'gj', { remap = true })
