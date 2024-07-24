@@ -1,6 +1,3 @@
-# Install Commands
-`apt install --yes -- python3-venv`
+# NVim Configuration
 
-`:COQdeps`
-
-`:COQnow`
+This project includes configuration files for Neovim and VSCode-Neovim.

@@ -1,0 +1,45 @@
+-- vim.keymap.set({ "n", "x", "i" }, "gb", function()
+--   require("vscode-multi-cursor").addSelectionToNextFindMatch()
+-- end)
+
+local vscode = require('vscode')
+
+vim.keymap.set('n', '<Leader>p', function()
+  vscode.action("editor.action.marker.next")
+  vscode.action("vscode-neovim.escape")
+end, { remap = true })
+
+-- Get folding working with vscode neovim plugin
+vim.keymap.set('n', 'zM', function()
+  vscode.call('editor.foldAll')
+end, { remap = true, silent = true })
+vim.keymap.set('n', 'zR', function()
+  vscode.call('editor.unfoldAll')
+end, { remap = true, silent = true })
+vim.keymap.set('n', 'zc', function()
+  vscode.call('editor.fold')
+end, { remap = true, silent = true })
+vim.keymap.set('n', 'zC', function()
+  vscode.call('editor.foldRecursively')
+end, { remap = true, silent = true })
+vim.keymap.set('n', 'zo', function()
+  vscode.call('editor.unfold')
+end, { remap = true, silent = true })
+vim.keymap.set('n', 'zO', function()
+  vscode.call('editor.unfoldRecursively')
+end, { remap = true, silent = true })
+vim.keymap.set('n', 'za', function()
+  vscode.call('editor.toggleFold')
+end, { remap = true, silent = true })
+
+function MoveCursor(direction)
+  if vim.fn.reg_recording() == '' and vim.fn.reg_executing() == '' then
+    return 'g' .. direction
+  else
+    return direction
+  end
+end
+
+-- Move cursor up and down above folds
+vim.keymap.set('n', 'j', 'gj', { remap = true })
+vim.keymap.set('n', 'k', "gk", { remap = true })

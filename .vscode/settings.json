@@ -1,0 +1,6 @@
+{
+  "Lua.workspace.library": [
+    "/opt/homebrew/opt/nvim/share/nvim/runtime/lua/vim",
+    "~/.vscode/extensions/asvetliakov.vscode-neovim-1.18.5/runtime/lua"
+  ]
+}
