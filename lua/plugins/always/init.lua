@@ -9,7 +9,6 @@ return {
       'kana/vim-textobj-user'
     }
   },
-  { 'kana/vim-textobj-user' },
   {
     "mg979/vim-visual-multi",
   }

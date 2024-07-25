@@ -1,5 +1,6 @@
 local vscode = require('vscode')
 
+-- Go to next problem in file
 vim.keymap.set('n', '<Leader>p', function()
   vscode.action("editor.action.marker.next")
   vscode.action("vscode-neovim.escape")
@@ -31,3 +32,17 @@ end, { remap = true, silent = true })
 -- Move cursor up and down above folds
 vim.keymap.set('n', 'j', 'gj', { remap = true })
 vim.keymap.set('n', 'k', "gk", { remap = true })
+
+-- Move between splits with ctrl + hjkl
+-- vim.keymap.set({ 'n', 'x' }, '<C-j>', function()
+--   vscode.call("workbench.action.navigateDown")
+-- end, { noremap = true })
+-- vim.keymap.set({ 'n', 'x' }, '<C-k>', function()
+--   vscode.call("workbench.action.navigateUp")
+-- end, { noremap = true })
+-- vim.keymap.set({ 'n', 'x' }, '<C-h>', function()
+--   vscode.call("workbench.action.navigateLeft")
+-- end, { noremap = true })
+-- vim.keymap.set({ '', 'x' }, '<C-l>', function()
+--   vscode.call("workbench.action.navigateRight")
+-- end, { noremap = true })

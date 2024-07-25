@@ -1,15 +1,16 @@
 require 'lazy.lazy-bootstrap'
+local require_files = require 'utils.require-files'
 
-require 'config.always'
+require_files('config', 'always')
 
 if vim.g.vscode then
   -- VSCode config
 
-  require 'config.vscode'
+  require_files('config', 'vscode')
 else
   -- Local neovim config
 
-  require 'config.local'
+  require_files('config', 'local')
 end
 
 require('lazy').setup({
