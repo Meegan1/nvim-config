@@ -2,8 +2,8 @@ local vscode = require('vscode')
 
 -- Go to next problem in file
 vim.keymap.set('n', '<Leader>p', function()
-  vscode.action("editor.action.marker.next")
-  vscode.action("vscode-neovim.escape")
+  vscode.call("editor.action.marker.next")
+  -- vscode.call("closeMarkersNavigation")
 end, { remap = true })
 
 -- Get folding working with vscode neovim plugin
