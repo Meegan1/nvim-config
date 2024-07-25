@@ -1,11 +1,6 @@
 {
-  "LazyVim": { "branch": "main", "commit": "bcbab77f0c5851e6d73f275f2d27c3baa4f6aa68" },
-  "barbar.nvim": { "branch": "master", "commit": "53b5a2f34b68875898f0531032fbf090e3952ad7" },
-  "gitsigns.nvim": { "branch": "main", "commit": "b29cb58126663569f6f34401fab513c2375e95d3" },
+  "CamelCaseMotion": { "branch": "master", "commit": "de439d7c06cffd0839a29045a103fe4b44b15cdc" },
   "lazy.nvim": { "branch": "main", "commit": "4496b4cad69a862199bb3ad452d3c4988bb925a1" },
-  "nightfox.nvim": { "branch": "main", "commit": "d83145614e8082b24a001643f1c6c00c0ea9aaef" },
-  "nvim-tree.lua": { "branch": "master", "commit": "4e396b26244444c911b73e9f2f40ae0115351fd1" },
-  "nvim-web-devicons": { "branch": "master", "commit": "e612de3d3a41a6b7be47f51e956dddabcbf419d9" },
   "targets.vim": { "branch": "master", "commit": "6325416da8f89992b005db3e4517aaef0242602e" },
   "vim-easymotion": { "branch": "master", "commit": "b3cfab2a6302b3b39f53d9fd2cd997e1127d7878" },
   "vim-repeat": { "branch": "master", "commit": "65846025c15494983dafe5e3b46c8f88ab2e9635" },
