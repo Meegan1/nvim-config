@@ -1,0 +1,70 @@
+[
+  {
+    "key": "ctrl+u",
+    "command": "runCommands",
+    "args": {
+      "commands": [
+        {
+          "command": "editorScroll",
+          "args": {
+            "to": "up",
+            "by": "wrappedLine",
+            "value": 20
+          }
+        },
+        {
+          "command": "cursorMove",
+          "args": {
+            "to": "up",
+            "by": "wrappedLine",
+            "value": 20
+          }
+        }
+      ]
+    }
+  },
+  {
+    "key": "ctrl+d",
+    "command": "runCommands",
+    "args": {
+      "commands": [
+        {
+          "command": "editorScroll",
+          "args": {
+            "to": "down",
+            "by": "wrappedLine",
+            "value": 20
+          }
+        },
+        {
+          "command": "cursorMove",
+          "args": {
+            "to": "down",
+            "by": "wrappedLine",
+            "value": 20
+          }
+        }
+      ]
+    }
+  }
+  // {
+  //   "key": "cmd+c",
+  //   "command": "runCommands",
+  //   "args": {
+  //     "commands": [
+  //       "editor.action.clipboardCopyAction",
+  //       {
+  //         "command": "vscode-neovim.lua",
+  //         "args": [
+  //           [
+  //             "local code = require('vscode')",
+  //             // "code.action('vscode-neovim.escape')",
+  //             "code.notify('Copied to clipboard')"
+  //           ]
+  //         ]
+  //       }
+  //     ]
+  //   },
+  //   "when": "editorTextFocus"
+  // }
+]
