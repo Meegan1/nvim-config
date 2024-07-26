@@ -10,6 +10,12 @@ return {
     }
   },
   {
+    'kana/vim-textobj-line',
+    dependencies = {
+      'kana/vim-textobj-user'
+    }
+  },
+  {
     "mg979/vim-visual-multi",
   },
   {
