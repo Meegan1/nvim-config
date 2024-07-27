@@ -1,7 +1,17 @@
 vim.g.VM_leader = '<Leader><Leader>'
 
--- gb to select next occurence of word under cursor as multiple cursors
-vim.keymap.set({ 'n', 'v' }, 'gb', '<C-n>', { remap = true })
+-- Set the maps and enable features
+vim.g.VM_maps = {
+  -- Rebind defaults
+  ['Find Under'] = 'gb',
+  ['Find Subword Under'] = 'gb',
+  ['Select Cursor Down'] = '<S-Down>',
+  ['Select Cursor Up'] = '<S-Up>',
+
+  -- Enable undo and redo
+  ['Undo'] = 'u',
+  ['Redo'] = '<C-r>',
+}
 
 -- Set the color of the cursor for multi-cursor when in cursor mode
 vim.api.nvim_set_hl(0, 'VM_Mono', { bg = 'Grey60', fg = 'black' })
