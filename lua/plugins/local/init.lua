@@ -42,5 +42,8 @@ return {
         'lewis6991/gitsigns.nvim'
       }
     }
-  }
+  },
+  {
+    'markonm/traces.vim'
+  },
 }

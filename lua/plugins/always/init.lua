@@ -22,9 +22,6 @@ return {
     "bkad/CamelCaseMotion"
   },
   {
-    'markonm/traces.vim'
-  },
-  {
     "tpope/vim-abolish",
   }
 }
