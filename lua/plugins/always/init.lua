@@ -19,9 +19,12 @@ return {
     "mg979/vim-visual-multi",
   },
   {
-    "bkad/CamelCaseMotion"
+    "bkad/CamelCaseMotion",
   },
   {
     "tpope/vim-abolish",
+  },
+  {
+    'andrewradev/splitjoin.vim'
   }
 }
