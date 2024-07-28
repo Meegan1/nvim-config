@@ -21,21 +21,10 @@ return {
   {
     "bkad/CamelCaseMotion"
   },
-  -- {
-  --   'smjonas/live-command.nvim',
-  --   opts = {
-  --     commands = {
-  --       S = { cmd = "Subvert" }, -- must be defined before we import vim-abolish
-  --     },
-  --   }
-  -- },
   {
     'markonm/traces.vim'
   },
   {
     "tpope/vim-abolish",
-    -- dependencies = {
-    --   'smjonas/live-command.nvim'
-    -- }
   }
 }
