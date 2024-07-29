@@ -46,3 +46,9 @@ vim.keymap.set('n', 'k', "gk", { remap = true })
 -- vim.keymap.set({ '', 'x' }, '<C-l>', function()
 --   vscode.call("workbench.action.navigateRight")
 -- end, { noremap = true })
+
+
+-- Rename symbol
+vim.keymap.set('n', '<Leader>rn', function()
+  vscode.call("editor.action.rename")
+end, { noremap = true })
