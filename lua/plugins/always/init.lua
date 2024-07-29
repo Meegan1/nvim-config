@@ -26,5 +26,21 @@ return {
   },
   {
     'andrewradev/splitjoin.vim'
+  },
+  {
+    'echasnovski/mini.move',
+    opts = {
+      mappings = {
+        left = '<A-h>',
+        down = '<A-j>',
+        up = '<A-k>',
+        right = '<A-l>',
+
+        line_left = '<A-h>',
+        line_down = '<A-j>',
+        line_up = '<A-k>',
+        line_right = '<A-l>',
+      }
+    }
   }
 }

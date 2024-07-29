@@ -46,6 +46,30 @@
         }
       ]
     }
+  },
+  {
+    "key": "alt+h",
+    "command": "vscode-neovim.send",
+    "args": "<A-h>",
+    "when": "editorTextFocus && neovim.init"
+  },
+  {
+    "key": "alt+j",
+    "command": "vscode-neovim.send",
+    "args": "<A-j>",
+    "when": "editorTextFocus && neovim.init"
+  },
+  {
+    "key": "alt+k",
+    "command": "vscode-neovim.send",
+    "args": "<A-k>",
+    "when": "editorTextFocus && neovim.init"
+  },
+  {
+    "key": "alt+l",
+    "command": "vscode-neovim.send",
+    "args": "<A-l>",
+    "when": "editorTextFocus && neovim.init"
   }
   // {
   //   "key": "cmd+c",
