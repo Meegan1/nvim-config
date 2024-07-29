@@ -29,3 +29,7 @@ function on_nvim_tree_attach()
   -- open files when pressing l
   vim.keymap.set('n', 'l', api.node.open.edit)
 end
+
+-- map BufferNext and BufferPrevious to gt and gT
+vim.keymap.set('n', 'gt', ':BufferNext<CR>')
+vim.keymap.set('n', 'gT', ':BufferPrevious<CR>')
