@@ -46,4 +46,7 @@ return {
   {
     'markonm/traces.vim'
   },
+  {
+    'nvim-telescope/telescope.nvim'
+  }
 }
