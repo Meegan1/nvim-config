@@ -33,8 +33,6 @@ local function edit_or_open()
   else
     -- open file
     api.node.open.edit()
-    -- Close the tree if file was opened
-    api.tree.close()
   end
 end
 
