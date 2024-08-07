@@ -7,6 +7,10 @@ return {
     end
   },
   {
+    "nvim-treesitter/nvim-treesitter",
+    build = ":TSUpdate",
+  },
+  {
     "nvim-tree/nvim-tree.lua",
     opts = {
       filters = {
