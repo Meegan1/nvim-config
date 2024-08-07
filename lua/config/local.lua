@@ -33,3 +33,6 @@ end
 -- map BufferNext and BufferPrevious to gt and gT
 vim.keymap.set('n', 'gt', ':BufferNext<CR>')
 vim.keymap.set('n', 'gT', ':BufferPrevious<CR>')
+
+-- map shift + tab to indent left
+vim.keymap.set('i', '<S-Tab>', '<C-d>')
