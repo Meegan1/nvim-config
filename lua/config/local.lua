@@ -22,12 +22,30 @@ local function open_nvim_tree(data)
 end
 -- vim.api.nvim_create_autocmd({ 'VimEnter' }, { callback = open_nvim_tree })
 
--- keymap for nvim-tree
-function on_nvim_tree_attach()
+local function edit_or_open()
   local api = require('nvim-tree.api')
 
+  local node = api.tree.get_node_under_cursor()
+
+  if node.nodes ~= nil then
+    -- expand or collapse folder
+    api.node.open.edit()
+  else
+    -- open file
+    api.node.open.edit()
+    -- Close the tree if file was opened
+    api.tree.close()
+  end
+end
+
+-- keymap for nvim-tree
+function on_nvim_tree_attach(bufnr)
+  local opts = function(desc)
+    return { desc = "nvim-tree: " .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
+  end
+
   -- open files when pressing l
-  vim.keymap.set('n', 'l', api.node.open.edit)
+  vim.keymap.set('n', 'l', edit_or_open, opts('Edit or Open'))
 end
 
 -- map BufferNext and BufferPrevious to gt and gT
