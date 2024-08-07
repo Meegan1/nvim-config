@@ -1,11 +1,10 @@
 return {
-  { "EdenEast/nightfox.nvim", tag = "v1.0.0" },
-  -- Configure LazyVim to load nightfox
   {
-    "LazyVim/LazyVim",
-    opts = {
-      colorscheme = "nightfox",
-    },
+    "catppuccin/nvim",
+    opts = {},
+    config = function()
+      vim.cmd.colorscheme "catppuccin"
+    end
   },
   {
     "nvim-tree/nvim-tree.lua",
