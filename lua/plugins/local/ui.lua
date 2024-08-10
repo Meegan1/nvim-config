@@ -114,7 +114,7 @@ return {
     version = "*",
     opts = {
       size = 20,
-      open_mapping = [[<c-_>]],
+      open_mapping = [[<D-j>]],
       dir = "git_dir",
       hide_numbers = true,
       shade_terminals = true,
