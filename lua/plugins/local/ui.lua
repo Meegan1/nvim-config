@@ -1,6 +1,13 @@
 return {
   {
     "nvim-tree/nvim-tree.lua",
+    version = "*",
+    lazy = false,
+    dependencies = {
+      {
+        "kyazdani42/nvim-web-devicons"
+      }
+    },
     opts = {
       filters = {
         dotfiles = false,
@@ -13,11 +20,6 @@ return {
       },
       on_attach = on_nvim_tree_attach,
     },
-    dependencies = {
-      {
-        "kyazdani42/nvim-web-devicons"
-      }
-    }
   },
   {
     "romgrk/barbar.nvim",
