@@ -40,3 +40,8 @@ vim.keymap.set({ 'i' }, '<D-z>', '<C-o>:u<CR>')
 -- redo on cmd + shift + z
 vim.keymap.set({ 'n' }, '<S-D-Z>', ':red<CR>')
 vim.keymap.set({ 'i' }, '<S-D-Z>', '<C-o>:red<CR>')
+
+-- set numbers enabled
+vim.opt.number = true
+-- disable relative numbers
+vim.opt.relativenumber = false
