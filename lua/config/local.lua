@@ -1,14 +1,18 @@
 -- map BufferNext and BufferPrevious to gt and gT
-vim.keymap.set('n', 'gt', ':BufferNext<CR>')
-vim.keymap.set('n', 'gT', ':BufferPrevious<CR>')
+vim.keymap.set('n', 'gt', function()
+  vim.cmd('BufferNext')
+end)
+vim.keymap.set('n', 'gT', function()
+  vim.cmd('BufferPrevious')
+end)
 
 -- map shift + tab to indent left
 vim.keymap.set('i', '<S-Tab>', '<C-d>')
 
 -- save on cmd + s
-vim.keymap.set({ 'n' }, '<D-s>', ':w<CR>')
-vim.keymap.set({ 'i' }, '<D-s>', '<C-o>:w<CR>')
-vim.keymap.set({ 'v' }, '<D-s>', ':w<CR>')
+vim.keymap.set({ 'n', 'x', 'v' }, '<D-s>', function()
+  vim.cmd('w')
+end)
 
 -- close buffer on cmd + when there is no unsaved change
 local function close_buffer_or_window()
@@ -19,27 +23,34 @@ local function close_buffer_or_window()
   else
     vim.cmd('BufferClose')
   end
+
+  -- if in visual or insert mode, return to normal mode
+  if vim.api.nvim_get_mode().mode == 'v' or vim.api.nvim_get_mode().mode == 'i' then
+    vim.cmd('stopinsert')
+  end
 end
 
-vim.keymap.set({ 'n' }, '<D-w>', close_buffer_or_window)
-vim.keymap.set({ 'i' }, '<D-w>', '<C-o>:lua close_buffer_or_window()<CR>')
-vim.keymap.set({ 'v' }, '<D-w>', ':lua close_buffer_or_window()<CR>')
+vim.keymap.set({ 'n', 'i', 'v' }, '<D-w>', close_buffer_or_window)
 
 -- reopen last closed buffer on cmd + shift + t
-vim.keymap.set({ 'n' }, '<S-D-t>', ':BufferRestore<CR>')
-vim.keymap.set({ 'i' }, '<S-D-t>', '<C-o>:BufferRestore<CR>')
-vim.keymap.set({ 'v' }, '<S-D-t>', ':BufferRestore<CR>')
+vim.keymap.set({ 'n', 'i', 'v' }, '<S-D-t>', function()
+  vim.cmd('BufferRestore')
+end)
 
 -- create a new buffer on cmd + n
-vim.keymap.set({ 'n' }, '<D-n>', ':enew<CR>')
+vim.keymap.set({ 'n' }, '<D-n>', function()
+  vim.cmd('enew')
+end)
 
 -- undo on cmd + z
-vim.keymap.set({ 'n' }, '<D-z>', ':u<CR>')
-vim.keymap.set({ 'i' }, '<D-z>', '<C-o>:u<CR>')
+vim.keymap.set({ 'n', 'i' }, '<D-z>', function()
+  vim.cmd('u')
+end)
 
 -- redo on cmd + shift + z
-vim.keymap.set({ 'n' }, '<S-D-Z>', ':red<CR>')
-vim.keymap.set({ 'i' }, '<S-D-Z>', '<C-o>:red<CR>')
+vim.keymap.set({ 'n', 'i' }, '<S-D-Z>', function()
+  vim.cmd('redo')
+end)
 
 -- set numbers enabled
 vim.opt.number = true

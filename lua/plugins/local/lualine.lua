@@ -20,7 +20,7 @@ return {
           }
         },
         lualine_c = { 'filename' },
-        lualine_x = { 'copilot', 'fileformat', 'filetype' },
+        lualine_x = { 'copilot', 'filetype' },
         lualine_y = { 'progress' },
         lualine_z = { 'location', 'searchcount' },
       },
