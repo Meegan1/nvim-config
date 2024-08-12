@@ -144,14 +144,14 @@ return {
       require("toggleterm").setup(opts)
 
       local Terminal = require('toggleterm.terminal').Terminal
-      local lazygit  = Terminal:new({ cmd = "lazygit", hidden = true })
+      local lazygit  = Terminal:new({ cmd = "lazygit", hidden = true, direction = "float" })
 
       function _lazygit_toggle()
         print("Toggling lazygit")
         lazygit:toggle()
       end
 
-      vim.keymap.set("n", "<leader>g", _lazygit_toggle, { noremap = true, silent = true })
+      vim.keymap.set({ "n", "i", "v", "t" }, "<D-g>", _lazygit_toggle, { noremap = true, silent = true })
     end,
   },
   {
