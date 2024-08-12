@@ -19,7 +19,11 @@ return {
             symbols = { error = ' ', warn = ' ', info = ' ', hint = ' ' }
           }
         },
-        lualine_c = { 'filename' },
+        lualine_c = {
+          function()
+            return require('auto-session.lib').current_session_name(true)
+          end
+        },
         lualine_x = { 'copilot', 'filetype' },
         lualine_y = { 'progress' },
         lualine_z = { 'location', 'searchcount' },

@@ -1,31 +1,33 @@
 return {
   {
-    "nvim-tree/nvim-tree.lua",
-    version = "*",
-    lazy = false,
+    "nvim-neo-tree/neo-tree.nvim",
+    branch = "v3.x",
     dependencies = {
-      {
-        "kyazdani42/nvim-web-devicons"
-      }
+      "nvim-lua/plenary.nvim",
+      "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
+      "MunifTanjim/nui.nvim",
+      "3rd/image.nvim",              -- Optional image support in preview window: See `# Preview Mode` for more information
     },
     opts = {
-      filters = {
-        dotfiles = false,
-      },
-      tab = {
-        sync = {
-          open = true,
-          close = true,
+      -- auto_clean_after_session_restore = true,
+      filesystem = {
+        filtered_items = {
+          visible = true,
+          hide_dotfiles = false,
         }
       },
-      on_attach = on_nvim_tree_attach,
-    },
+      window = {
+        mappings = {
+          ["l"] = "open"
+        }
+      }
+    }
   },
   {
     "romgrk/barbar.nvim",
     opts = {
       sidebar_filetypes = {
-        NvimTree = true
+        ['neo-tree'] = true
       }
     },
     dependencies = {
@@ -112,6 +114,7 @@ return {
   {
     "akinsho/toggleterm.nvim",
     version = "*",
+    lazy = false,
     opts = {
       size = 20,
       open_mapping = [[<D-j>]],
@@ -137,5 +140,23 @@ return {
         desc = "Find Toggle Term",
       },
     },
+    config = function(_, opts)
+      require("toggleterm").setup(opts)
+
+      local Terminal = require('toggleterm.terminal').Terminal
+      local lazygit  = Terminal:new({ cmd = "lazygit", hidden = true })
+
+      function _lazygit_toggle()
+        print("Toggling lazygit")
+        lazygit:toggle()
+      end
+
+      vim.keymap.set("n", "<leader>g", _lazygit_toggle, { noremap = true, silent = true })
+    end,
   },
+  {
+    "NStefan002/screenkey.nvim",
+    lazy = false,
+    version = "*",
+  }
 }
