@@ -1,6 +1,5 @@
 return {
   { 'tpope/vim-repeat', },
-  { 'tpope/vim-surround', },
   { 'easymotion/vim-easymotion' },
   { 'wellle/targets.vim' },
   {
