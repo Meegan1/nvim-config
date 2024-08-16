@@ -14,26 +14,12 @@ vim.keymap.set({ 'n', 'i', 'v' }, '<D-s>', function()
   vim.cmd('w')
 end)
 
--- close buffer on cmd + when there is no unsaved change
-local function close_buffer_or_window()
-  local buffers = vim.fn.getbufinfo({ buflisted = 1 })
-  if #buffers == 1 then
-    vim.cmd('BufferClose')
-    vim.cmd('quit')
-  else
-    vim.cmd('BufferClose')
-  end
-
-  -- if in visual or insert mode, return to normal mode
-  if vim.api.nvim_get_mode().mode == 'v' or vim.api.nvim_get_mode().mode == 'i' then
-    vim.cmd('stopinsert')
-  end
-end
-
-vim.keymap.set({ 'n', 'i', 'v' }, '<D-w>', close_buffer_or_window)
+vim.keymap.set({ 'n', 'i', 'v' }, '<D-w>', function()
+  vim.cmd('CloseTab')
+end)
 
 -- reopen last closed buffer on cmd + shift + t
-vim.keymap.set({ 'n', 'i', 'v' }, '<S-D-t>', function()
+vim.keymap.set({ 'n', 'i', 'v' }, '<S-D-T>', function()
   vim.cmd('BufferRestore')
 end)
 
