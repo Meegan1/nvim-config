@@ -147,7 +147,6 @@ return {
       local lazygit  = Terminal:new({ cmd = "lazygit", hidden = true, direction = "float" })
 
       function _lazygit_toggle()
-        print("Toggling lazygit")
         lazygit:toggle()
       end
 

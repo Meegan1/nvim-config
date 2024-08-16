@@ -2,8 +2,23 @@ return {
   {
     "catppuccin/nvim",
     opts = {},
+    priority = 1000, -- Ensure it loads first
     config = function()
       vim.cmd.colorscheme "catppuccin"
+
+      require('catppuccin').setup({
+        integrations = {
+          cmp = true,
+          mason = true,
+          telescope = true,
+          gitsigns = true,
+          treesitter = true,
+          noice = true,
+          nvim_surround = true,
+          neotree = true,
+          barbar = true,
+        }
+      })
     end
   },
 }
