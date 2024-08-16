@@ -70,7 +70,7 @@
     "command": "vscode-neovim.send",
     "args": "<A-l>",
     "when": "editorTextFocus && neovim.init"
-  }
+  },
   // {
   //   "key": "cmd+c",
   //   "command": "runCommands",
@@ -91,4 +91,16 @@
   //   },
   //   "when": "editorTextFocus"
   // }
+  {
+    "command": "vscode-neovim.send",
+    "key": "shift+.",
+    "when": "editorTextFocus && neovim.mode == insert",
+    "args": ">"
+  },
+  {
+    "command": "vscode-neovim.send",
+    "key": "/",
+    "when": "editorTextFocus && neovim.mode == insert",
+    "args": "/"
+  }
 ]
