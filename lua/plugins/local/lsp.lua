@@ -29,6 +29,12 @@ return {
       local lsp_zero = require('lsp-zero')
       lsp_zero.extend_lspconfig()
 
+      local util = require('vim.lsp.util')
+
+      local Config = require("noice.config")
+      local Docs = require("noice.lsp.docs")
+      local Format = require("noice.lsp.format")
+
       --- if you want to know more about lsp-zero and mason.nvim
       --- read this: https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/integrate-with-mason-nvim.md
       lsp_zero.on_attach(function(client, bufnr)
@@ -39,8 +45,70 @@ return {
 
         -- bind gh to vim.lsp.buf.hover()
         vim.keymap.set('n', 'gh', function()
-          vim.lsp.buf.hover()
+          -- vim.lsp.buf.hover()
+
+          local params = util.make_position_params()
+          vim.lsp.buf_request(0, 'textDocument/hover', params, function(err, result, ctx)
+            local buf = vim.api.nvim_get_current_buf()
+            -- local pos_info = vim.inspect_pos(vim.api.nvim_get_current_buf(), mouse_pos.line - 1, mouse_pos.column - 1)
+
+            local diags = vim.diagnostic.get(buf)
+            print(vim.inspect(diags))
+
+            local contents = {
+              kind = "markdown",
+              value = result and result.contents and result.contents.value or "",
+            }
+
+
+            -- if diags length > 0 then prepend Diagnostics:
+            if #diags > 0 then
+              if result and result.contents then
+                contents.value = contents.value .. "\n---\n"
+              end
+
+              contents.value = contents.value .. "Diagnostics:"
+            end
+
+            for i, diag in ipairs(diags) do
+              print(diag.message)
+
+              contents.value = contents.value .. "\n" .. i .. ". " .. diag.message .. " \\[" .. diag.code .. "\\]"
+            end
+
+            print(contents.value)
+
+            if not (contents) then
+              if Config.options.lsp.hover.silent ~= true then
+                vim.notify("No information available")
+              end
+              return
+            end
+
+            local message = Docs.get("hover")
+
+            if not message:focus() then
+              Format.format(message, contents, { ft = vim.bo[ctx.bufnr].filetype })
+              if message:is_empty() then
+                if Config.options.lsp.hover.silent ~= true then
+                  vim.notify("No information available")
+                end
+                return
+              end
+              Docs.show(message)
+            end
+          end
+          )
         end, { buffer = bufnr, desc = "Show hover doc" })
+
+        -- bind gH to vim.diagnostic.open_float()
+        vim.keymap.set('n', 'gH', function()
+          vim.diagnostic.open_float(nil, {
+            anchor_bias = 'below',
+            focusable = true,
+            -- relative = "mouse"
+          })
+        end, { buffer = bufnr, desc = "Show signature help" })
 
         -- bind <Esc> to close the hover buffer
         vim.keymap.set('n', '<Esc>', function()
@@ -72,6 +140,17 @@ return {
     end
   },
   { 'hrsh7th/cmp-nvim-lsp' },
+  {
+    "folke/lazydev.nvim",
+    ft = "lua", -- only load on lua files
+    opts = {
+      library = {
+        -- Load luvit types when the `vim.uv` word is found
+        { path = "luvit-meta/library", words = { "vim%.uv" } },
+      },
+    },
+  },
+  { "Bilal2453/luvit-meta", lazy = true },
   {
     'hrsh7th/nvim-cmp',
     version = false, -- last release is way too old
@@ -127,6 +206,10 @@ return {
           { name = "nvim_lsp" },
           { name = "path" },
           { name = "buffer" },
+          {
+            name = "lazydev",
+            group_index = 0,
+          }
         }),
         window = {
           completion = cmp.config.window.bordered(),
