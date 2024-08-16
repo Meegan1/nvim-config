@@ -8,3 +8,5 @@ vim.opt.number = true
 vim.opt.relativenumber = false
 -- set session options
 vim.opt.sessionoptions = 'blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions'
+vim.opt.cursorline = true
+vim.opt.wrap = false
