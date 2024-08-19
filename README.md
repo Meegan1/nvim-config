@@ -2,6 +2,10 @@
 
 This project includes configuration files for Neovim and VSCode-Neovim.
 
+## Requirements
+
+- [] Neovim Remote (`brew install neovim-remote`)
+
 ## Installation
 
 1. Install Neovim v0.9.5:

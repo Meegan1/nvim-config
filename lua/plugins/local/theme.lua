@@ -4,9 +4,7 @@ return {
     opts = {},
     priority = 1000, -- Ensure it loads first
     config = function()
-      vim.cmd.colorscheme "catppuccin"
-
-      require('catppuccin').setup({
+      require("catppuccin").setup({
         integrations = {
           cmp = true,
           mason = true,
@@ -17,8 +15,10 @@ return {
           nvim_surround = true,
           neotree = true,
           barbar = true,
-        }
+        },
       })
-    end
+
+      vim.cmd.colorscheme("catppuccin")
+    end,
   },
 }
