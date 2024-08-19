@@ -7,6 +7,7 @@ vim.opt.number = true
 -- disable relative numbers
 vim.opt.relativenumber = false
 -- set session options
-vim.opt.sessionoptions = 'blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions'
+vim.opt.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal"
 vim.opt.cursorline = true
 vim.opt.wrap = false
+vim.opt.undofile = true
