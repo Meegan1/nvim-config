@@ -6,7 +6,7 @@ return {
       "nvim-lua/plenary.nvim",
       "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
       "MunifTanjim/nui.nvim",
-      "3rd/image.nvim",              -- Optional image support in preview window: See `# Preview Mode` for more information
+      "3rd/image.nvim",           -- Optional image support in preview window: See `# Preview Mode` for more information
     },
     opts = {
       -- auto_clean_after_session_restore = true,
@@ -14,30 +14,65 @@ return {
         filtered_items = {
           visible = true,
           hide_dotfiles = false,
-        }
+        },
       },
       window = {
         mappings = {
-          ["l"] = "open"
-        }
-      }
-    }
+          ["l"] = "open",
+          ["o"] = "toggle_node",
+          ["oc"] = "noop",
+          ["od"] = "noop",
+          ["og"] = "noop",
+          ["om"] = "noop",
+          ["on"] = "noop",
+          ["os"] = "noop",
+          ["ot"] = "noop",
+        },
+      },
+      -- file nesting
+      nesting_rules = {
+        ["js"] = {
+          "test.js",
+          "spec.js",
+          "stories.js",
+        },
+        ["ts"] = {
+          "test.ts",
+          "spec.ts",
+          "stories.ts",
+        },
+        ["jsx"] = {
+          "test.jsx",
+          "spec.jsx",
+          "stories.jsx",
+        },
+        ["tsx"] = {
+          "test.tsx",
+          "spec.tsx",
+          "stories.tsx",
+        },
+        ["package.json"] = {
+          pattern = "^package%.json$",         -- <-- Lua pattern
+          files = { "package-lock.json", "yarn*" }, -- <-- glob pattern
+        },
+      },
+    },
   },
   {
     "romgrk/barbar.nvim",
     opts = {
       sidebar_filetypes = {
-        ['neo-tree'] = true
-      }
+        ["neo-tree"] = true,
+      },
     },
     dependencies = {
       {
-        "kyazdani42/nvim-web-devicons"
+        "kyazdani42/nvim-web-devicons",
       },
       {
-        'lewis6991/gitsigns.nvim'
-      }
-    }
+        "lewis6991/gitsigns.nvim",
+      },
+    },
   },
   {
     "folke/edgy.nvim",
@@ -143,8 +178,8 @@ return {
     config = function(_, opts)
       require("toggleterm").setup(opts)
 
-      local Terminal = require('toggleterm.terminal').Terminal
-      local lazygit  = Terminal:new({ cmd = "lazygit", hidden = true, direction = "float" })
+      local Terminal = require("toggleterm.terminal").Terminal
+      local lazygit = Terminal:new({ cmd = "lazygit", hidden = true, direction = "float" })
 
       function _lazygit_toggle()
         lazygit:toggle()
@@ -157,5 +192,5 @@ return {
     "NStefan002/screenkey.nvim",
     lazy = false,
     version = "*",
-  }
+  },
 }
