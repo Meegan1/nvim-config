@@ -190,12 +190,32 @@ return {
     "luckasRanarison/tailwind-tools.nvim",
     name = "tailwind-tools",
     build = ":UpdateRemotePlugins",
+    branch = "master",
     dependencies = {
       "nvim-treesitter/nvim-treesitter",
-      "nvim-telescope/telescope.nvim", -- optional
-      "neovim/nvim-lspconfig",      -- optional
+      "nvim-telescope/telescope.nvim",
+      "neovim/nvim-lspconfig",
     },
-    opts = {},                      -- your configuration
+    opts = {
+      server = {
+        settings = {
+          settings = {
+            experimental = {
+              classRegex = {
+                "\\/\\*\\s*tw\\s*\\*\\/\\s*[`'\"](.*)[`'\"];?",
+                { "(?:twMerge|twJoin)\\(([^\\);]*)[\\);]", "[`'\"]([^'\"`,;]*)[`'\"]" },
+                "twc\\`(.*)\\`;?",
+                { "cva\\(([^)]*)\\)",                      "[\"'`]([^\"'`]*).*?[\"'`]" },
+                { "cx\\(([^)]*)\\)",                       "(?:'|\"|`)([^']*)(?:'|\"|`)" },
+              },
+            },
+          },
+        },
+      },
+    },
+    config = function(_, opts)
+      require("tailwind-tools").setup(opts)
+    end,
   },
   { "hrsh7th/cmp-nvim-lsp" },
   {
