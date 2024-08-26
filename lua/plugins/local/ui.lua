@@ -14,6 +14,10 @@ return {
         filtered_items = {
           visible = true,
           hide_dotfiles = false,
+          never_show = {
+            ".DS_Store",
+            ".git",
+          },
         },
       },
       window = {
