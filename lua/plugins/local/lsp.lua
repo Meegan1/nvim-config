@@ -91,11 +91,26 @@ return {
 
           local params = util.make_position_params()
           vim.lsp.buf_request(0, "textDocument/hover", params, function(err, result, ctx)
+            -- get the current buffer
             local buf = vim.api.nvim_get_current_buf()
-            -- local pos_info = vim.inspect_pos(vim.api.nvim_get_current_buf(), mouse_pos.line - 1, mouse_pos.column - 1)
 
-            local diags = vim.diagnostic.get(buf)
-            print(vim.inspect(diags))
+            -- get the current cursor position
+            local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+            local pos_info = vim.inspect_pos(buf, row - 1, col)
+
+            -- get diagnostics for the current line
+            local line_diags = vim.diagnostic.get(buf, {
+              lnum = pos_info.row,
+            })
+
+            -- filter diagnostics to only show the ones that are in the same column
+            local diags = {}
+            for i, diag in ipairs(line_diags) do
+              print(vim.inspect(diag))
+              if col >= diag.col and col <= diag.end_col then
+                diags[#diags + 1] = diag
+              end
+            end
 
             local contents = {
               kind = "markdown",
@@ -112,21 +127,19 @@ return {
             end
 
             for i, diag in ipairs(diags) do
-              print(diag.message)
-
-              contents.value = contents.value
-                  .. "\n"
-                  .. i
-                  .. ". "
-                  .. diag.message
-                  .. " \\["
-                  .. diag.code
-                  .. "\\]"
+              if col >= diag.col and col <= diag.end_col then
+                contents.value = contents.value
+                    .. "\n"
+                    .. i
+                    .. ". "
+                    .. diag.message
+                    .. " \\["
+                    .. diag.code
+                    .. "\\]"
+              end
             end
 
-            print(contents.value)
-
-            if not contents then
+            if not contents or contents.value == "" then
               if Config.options.lsp.hover.silent ~= true then
                 vim.notify("No information available")
               end
@@ -137,7 +150,7 @@ return {
 
             if not message:focus() then
               Format.format(message, contents, { ft = vim.bo[ctx.bufnr].filetype })
-              if message:is_empty() then
+              if message:is_empty() and ((not contents) or contents.value == "") then
                 if Config.options.lsp.hover.silent ~= true then
                   vim.notify("No information available")
                 end
@@ -175,12 +188,21 @@ return {
           "tsserver",
           "intelephense",
           "tailwindcss",
+          "helm_ls",
         },
         handlers = {
           -- this first function is the "default handler"
           -- it applies to every language server without a "custom handler"
           function(server_name)
-            require("lspconfig")[server_name].setup({})
+            local capabilities = vim.lsp.protocol.make_client_capabilities()
+            capabilities.textDocument.foldingRange = {
+              dynamicRegistration = false,
+              lineFoldingOnly = true,
+            }
+
+            require("lspconfig")[server_name].setup({
+              capabilities = capabilities,
+            })
           end,
         },
       })
@@ -316,4 +338,7 @@ return {
     end,
   },
   { "L3MON4D3/LuaSnip" },
+  {
+    "towolf/vim-helm",
+  },
 }
