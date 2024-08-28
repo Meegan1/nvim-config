@@ -200,9 +200,41 @@ return {
               lineFoldingOnly = true,
             }
 
-            require("lspconfig")[server_name].setup({
+            local opts = {
               capabilities = capabilities,
-            })
+              on_attach = function(client, bufnr)
+                -- inlay hints
+                if vim.fn.has("nvim-0.10") == 1 then
+                  vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+                end
+              end,
+            }
+
+            if server_name == "tsserver" then
+              local inlayHints = {
+                includeInlayParameterNameHints = "all", -- 'none' | 'literals' | 'all'
+                includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+                includeInlayVariableTypeHints = false,
+                includeInlayFunctionParameterTypeHints = true,
+                includeInlayVariableTypeHintsWhenTypeMatchesName = false,
+                includeInlayPropertyDeclarationTypeHints = true,
+                includeInlayFunctionLikeReturnTypeHints = false,
+                includeInlayEnumMemberValueHints = true,
+              }
+
+              opts = vim.tbl_extend("force", opts, {
+                settings = {
+                  typescript = {
+                    inlayHints = inlayHints,
+                  },
+                  javascript = {
+                    inlayHints = inlayHints,
+                  },
+                },
+              })
+            end
+
+            require("lspconfig")[server_name].setup(opts)
           end,
         },
       })
