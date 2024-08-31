@@ -95,15 +95,21 @@ return {
         end, { buffer = bufnr, desc = "Close hover doc" })
       end)
 
+      local ensure_installed = {
+        "lua_ls",
+        "tsserver",
+        "intelephense",
+        "tailwindcss",
+      }
+
+      -- if helm is installed, add helm_ls to ensure_installed
+      if vim.fn.has("helm") == 1 then
+        table.insert(ensure_installed, "helm_ls")
+      end
+
       require("mason-lspconfig").setup({
         -- LSP servers to ensure are installed
-        ensure_installed = {
-          "lua_ls",
-          "tsserver",
-          "intelephense",
-          "tailwindcss",
-          "helm_ls",
-        },
+        ensure_installed = ensure_installed,
         handlers = {
           -- this first function is the "default handler"
           -- it applies to every language server without a "custom handler"
