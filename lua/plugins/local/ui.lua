@@ -60,6 +60,12 @@ return {
           files = { "package-lock.json", "yarn*" }, -- <-- glob pattern
         },
       },
+      -- lsp
+      lsp = {
+        hover = {
+          silent = true,
+        },
+      },
     },
   },
   {
@@ -172,11 +178,6 @@ return {
         "<D-j>",
         "<cmd>:ToggleTerm<cr>",
         desc = "Toggle Term",
-      },
-      {
-        "<leader>ft",
-        "<cmd>:ToggleTerm<cr>",
-        desc = "Find Toggle Term",
       },
     },
     config = function(_, opts)
