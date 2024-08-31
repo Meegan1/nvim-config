@@ -15,6 +15,10 @@ return {
           nvim_surround = true,
           neotree = true,
           barbar = true,
+          indent_blankline = {
+            enabled = true,
+            scope_color = "surface1",
+          },
         },
       })
 
