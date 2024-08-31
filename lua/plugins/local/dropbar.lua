@@ -5,5 +5,16 @@ return {
     dependencies = {
       "nvim-telescope/telescope-fzf-native.nvim",
     },
+    opts = {
+      bar = {
+        sources = function(buf, _)
+          local sources = require("dropbar.sources")
+
+          return {
+            sources.path,
+          }
+        end,
+      },
+    },
   },
 }
