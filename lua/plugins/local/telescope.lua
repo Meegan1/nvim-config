@@ -1,6 +1,18 @@
 return {
   {
     "nvim-telescope/telescope.nvim",
+    opts = function()
+      return {
+        defaults = {
+          mappings = {
+            n = {
+              ["l"] = require("telescope.actions").select_default,
+              ["<D-.>"] = require("telescope.actions").select_default,
+            },
+          },
+        },
+      }
+    end,
     config = function(_, opts)
       require("telescope").setup(opts)
 
