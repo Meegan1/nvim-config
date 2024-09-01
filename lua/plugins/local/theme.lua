@@ -19,6 +19,7 @@ return {
             enabled = true,
             scope_color = "surface1",
           },
+          flash = true,
         },
       })
 
