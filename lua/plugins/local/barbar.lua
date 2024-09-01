@@ -28,6 +28,7 @@ return {
         function()
           vim.cmd("BufferMoveNext")
         end,
+        desc = "Move buffer right",
       },
     },
   },
