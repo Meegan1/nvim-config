@@ -30,6 +30,20 @@ return {
         end,
         desc = "Move buffer right",
       },
+      {
+        "<A-b>d",
+        function()
+          vim.cmd("BufferClose")
+        end,
+        desc = "Close buffer",
+      },
+      {
+        "<A-b>D",
+        function()
+          vim.cmd("BufferCloseAllButVisible")
+        end,
+        desc = "Close all buffers but visible",
+      },
     },
   },
 }
