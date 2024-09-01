@@ -15,5 +15,20 @@ return {
         "lewis6991/gitsigns.nvim",
       },
     },
+    keys = {
+      {
+        "<A-b>h",
+        function()
+          vim.cmd("BufferMovePrevious")
+        end,
+        desc = "Move buffer left",
+      },
+      {
+        "<A-b>l",
+        function()
+          vim.cmd("BufferMoveNext")
+        end,
+      },
+    },
   },
 }
