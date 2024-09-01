@@ -1,21 +1,5 @@
 return {
   {
-    "romgrk/barbar.nvim",
-    opts = {
-      sidebar_filetypes = {
-        ["neo-tree"] = true,
-      },
-    },
-    dependencies = {
-      {
-        "kyazdani42/nvim-web-devicons",
-      },
-      {
-        "lewis6991/gitsigns.nvim",
-      },
-    },
-  },
-  {
     "folke/edgy.nvim",
     event = "VeryLazy",
     keys = {
