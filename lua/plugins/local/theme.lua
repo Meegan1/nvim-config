@@ -20,6 +20,7 @@ return {
             scope_color = "surface1",
           },
           flash = true,
+          which_key = true,
         },
       })
 
