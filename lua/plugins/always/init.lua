@@ -1,6 +1,9 @@
 return {
   { "tpope/vim-repeat" },
-  { "wellle/targets.vim" },
+  {
+    "echasnovski/mini.ai",
+    config = true,
+  },
   {
     "kana/vim-textobj-entire",
     dependencies = {
