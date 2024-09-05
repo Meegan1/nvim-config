@@ -74,9 +74,4 @@ return {
       return opts
     end,
   },
-  {
-    "NStefan002/screenkey.nvim",
-    lazy = false,
-    version = "*",
-  },
 }
