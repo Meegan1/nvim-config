@@ -50,20 +50,24 @@ return {
         },
         keys = {
           -- increase width
-          ["<c-Right>"] = function(win)
+          ["<A-w>l"] = function(win)
             win:resize("width", 2)
           end,
           -- decrease width
-          ["<c-Left>"] = function(win)
+          ["<A-w>h"] = function(win)
             win:resize("width", -2)
           end,
           -- increase height
-          ["<c-Up>"] = function(win)
+          ["<A-w>k"] = function(win)
             win:resize("height", 2)
           end,
           -- decrease height
-          ["<c-Down>"] = function(win)
+          ["<A-w>j"] = function(win)
             win:resize("height", -2)
+          end,
+          -- reset all custom sizing
+          ["<A-w>="] = function(win)
+            win.view.edgebar:equalize()
           end,
         },
       }
