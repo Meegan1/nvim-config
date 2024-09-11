@@ -15,7 +15,11 @@ return {
           prev = false,
           dismiss = false,
         },
-      }
-    }
+      },
+      filetypes = {
+        yaml = true,
+        markdown = true,
+      },
+    },
   },
 }
