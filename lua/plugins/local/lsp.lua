@@ -135,7 +135,6 @@ return {
         "tsserver",
         "intelephense",
         "tailwindcss",
-        "jsonls",
       }
 
       -- if helm is installed, add helm_ls to ensure_installed
