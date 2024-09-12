@@ -132,7 +132,7 @@ return {
 
       local ensure_installed = {
         "lua_ls",
-        "tsserver",
+        "ts_ls",
         "intelephense",
         "tailwindcss",
       }
@@ -165,7 +165,7 @@ return {
               end,
             }
 
-            if server_name == "tsserver" then
+            if server_name == "ts_ls" then
               local inlayHints = {
                 includeInlayParameterNameHints = "all", -- 'none' | 'literals' | 'all'
                 includeInlayParameterNameHintsWhenArgumentMatchesName = false,
@@ -187,7 +187,7 @@ return {
                   },
                 },
               })
-              return -- skip tsserver
+              return -- skip ts_ls
             end
 
             require("lspconfig")[server_name].setup(opts)
