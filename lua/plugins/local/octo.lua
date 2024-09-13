@@ -21,7 +21,7 @@ return {
           -- run gh issue develop <issue_id> --checkout
           Job:new({
             command = "gh",
-            args = { "issue", "develop", issue_id, "--checkout" },
+            args = { "issue", "develop", issue_id, "--checkout", "--base", "main" },
             on_exit = function(j, return_val)
               if return_val == 0 then
                 vim.notify("Checked out issue", "info", { title = "Octo" })
