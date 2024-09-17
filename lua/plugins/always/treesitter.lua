@@ -22,6 +22,7 @@ return {
         "regex",
         "gotmpl",
         "helm",
+        "php",
       },
     },
     ---@param opts TSConfig
