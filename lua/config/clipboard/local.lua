@@ -1,12 +1,6 @@
 -- vim.o.clipboard = "unnamedplus"
 
 local function my_paste(reg)
-  -- return function(lines)
-  --   local content = vim.fn.getreg('"')
-  --   return vim.split(content, "\n")
-  -- end
-
-  -- local content
   -- get os
   local os = vim.uv.os_uname().sysname
   if os == "Linux" then
