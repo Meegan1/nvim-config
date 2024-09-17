@@ -34,6 +34,7 @@ return {
         typescriptreact = { "prettierd", "prettier", stop_after_first = true },
         javascriptreact = { "prettierd", "prettier", stop_after_first = true },
         json = { "prettierd", "prettier", stop_after_first = true },
+        helm = { "prettierd", "prettier", stop_after_first = true },
       },
       -- Set default options
       default_format_opts = {
