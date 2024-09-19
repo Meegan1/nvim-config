@@ -11,13 +11,15 @@ return {
       require("octo").setup()
       local Job = require("plenary.job")
 
-      -- add a command for checking out an issue from issue id in popup
-      vim.api.nvim_create_user_command("CheckoutIssue", function()
-        -- get the issue id from popup
-        local issue_id = vim.fn.input("Issue ID: ")
+      vim.api.nvim_create_user_command("CheckoutIssue", function(opts)
+        -- get the issue id from argument or popup
+        local issue_id = opts.args ~= "" and opts.args or vim.fn.input("Issue ID: ")
 
         -- check if issue id is not empty
         if issue_id ~= "" then
+          -- Notify the user that the branch creation is starting
+          vim.notify("Creating branch for issue " .. issue_id, "info", { title = "Octo" })
+
           -- run gh issue develop <issue_id> --checkout
           Job:new({
             command = "gh",
@@ -34,6 +36,7 @@ return {
         end
       end, {
         desc = "Checkout an issue",
+        nargs = "?",
       })
     end,
     cond = function()
