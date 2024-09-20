@@ -15,3 +15,7 @@ vim.opt.undofile = true
 -- spell check
 vim.opt.spell = true
 vim.opt.spelllang = "en_us"
+
+-- splitright and splitbelow
+vim.opt.splitright = true
+vim.opt.splitbelow = true
