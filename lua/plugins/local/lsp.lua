@@ -35,6 +35,7 @@ return {
         javascriptreact = { "prettierd", "prettier", stop_after_first = true },
         json = { "prettierd", "prettier", stop_after_first = true },
         helm = { "prettierd", "prettier", stop_after_first = true },
+        yaml = { "prettierd", "prettier", stop_after_first = true },
       },
       -- Set default options
       default_format_opts = {
@@ -136,6 +137,7 @@ return {
         "ts_ls",
         "intelephense",
         "tailwindcss",
+        "yamlls",
       }
 
       -- if helm is installed, add helm_ls to ensure_installed
@@ -189,6 +191,35 @@ return {
                 },
               })
               return -- skip ts_ls
+            end
+
+            if server_name == "yamlls" then
+              opts = vim.tbl_extend("force", opts, {
+                settings = {
+                  yaml = {
+                    schemas = {
+                      kubernetes = "templates/**",
+                      ["http://json.schemastore.org/github-workflow"] = ".github/workflows/*",
+                      ["http://json.schemastore.org/github-action"] = ".github/action.{yml,yaml}",
+                      ["http://json.schemastore.org/prettierrc"] = ".prettierrc.{yml,yaml}",
+                      ["http://json.schemastore.org/kustomization"] = "kustomization.{yml,yaml}",
+                      ["http://json.schemastore.org/chart"] = "Chart.{yml,yaml}",
+                    },
+                  },
+                },
+              })
+            end
+
+            if server_name == "helm_ls" then
+              opts = vim.tbl_extend("force", opts, {
+                settings = {
+                  ["helm-ls"] = {
+                    yamlls = {
+                      path = "yaml-language-server",
+                    },
+                  },
+                },
+              })
             end
 
             require("lspconfig")[server_name].setup(opts)
