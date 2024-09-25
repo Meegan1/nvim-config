@@ -23,6 +23,7 @@ return {
         "gotmpl",
         "helm",
         "php",
+        "diff",
       },
     },
     ---@param opts TSConfig
