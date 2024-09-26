@@ -11,7 +11,7 @@ return {
       local pre_hook = require("ts_context_commentstring.integrations.comment_nvim").create_pre_hook()
       return {
         pre_hook = pre_hook,
-        optleader = {
+        opleader = {
           line = "gc",
           block = "gC",
         },
