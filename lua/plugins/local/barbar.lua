@@ -6,6 +6,9 @@ return {
       sidebar_filetypes = {
         ["neo-tree"] = true,
       },
+      exclude_ft = {
+        "codecompanion",
+      },
     },
     dependencies = {
       {
