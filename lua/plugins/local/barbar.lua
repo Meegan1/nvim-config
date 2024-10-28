@@ -8,6 +8,7 @@ return {
       },
       exclude_ft = {
         "codecompanion",
+        "qf",
       },
     },
     dependencies = {
