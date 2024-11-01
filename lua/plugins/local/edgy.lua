@@ -32,28 +32,6 @@ return {
             end,
           },
         },
-        keys = {
-          -- increase width
-          ["<A-w>l"] = function(win)
-            win:resize("width", 2)
-          end,
-          -- decrease width
-          ["<A-w>h"] = function(win)
-            win:resize("width", -2)
-          end,
-          -- increase height
-          ["<A-w>k"] = function(win)
-            win:resize("height", 2)
-          end,
-          -- decrease height
-          ["<A-w>j"] = function(win)
-            win:resize("height", -2)
-          end,
-          -- reset all custom sizing
-          ["<A-w>="] = function(win)
-            win.view.edgebar:equalize()
-          end,
-        },
       }
       return opts
     end,

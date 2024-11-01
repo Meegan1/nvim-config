@@ -91,48 +91,6 @@ return {
 
       wk.setup(opts)
 
-      wk.add({
-        nowait = false,
-        {
-          "<A-w>",
-          desc = "Resize windows",
-          function()
-            wk.show({
-              keys = "<A-w>",
-              loop = true,
-            })
-          end,
-        },
-      })
-
-      wk.add({
-        nowait = false,
-        {
-          "<A-S-w>",
-          desc = "Swap windows",
-          function()
-            wk.show({
-              keys = "<A-S-w>",
-              loop = true,
-            })
-          end,
-        },
-      })
-
-      wk.add({
-        nowait = false,
-        {
-          "<A-b>",
-          desc = "Organize buffers",
-          function()
-            wk.show({
-              keys = "<A-b>",
-              loop = true,
-            })
-          end,
-        },
-      })
-
       ai_whichkey()
     end,
   },

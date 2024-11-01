@@ -30,36 +30,6 @@ return {
         end,
         desc = "Move down",
       },
-
-      {
-        "<A-w>h",
-        function()
-          require("smart-splits").resize_left()
-        end,
-        desc = "Resize left",
-      },
-      {
-        "<A-w>l",
-        function()
-          require("smart-splits").resize_right()
-        end,
-        desc = "Resize right",
-      },
-      {
-        "<A-w>k",
-        function()
-          require("smart-splits").resize_up()
-        end,
-        desc = "Resize up",
-      },
-      {
-        "<A-w>j",
-        function()
-          require("smart-splits").resize_down()
-        end,
-        desc = "Resize down",
-      },
-
       {
         "<A-S-w>h",
         function()
