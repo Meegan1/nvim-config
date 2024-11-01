@@ -54,6 +54,7 @@ return {
         },
         post_restore_cmds = {
           open_neo_tree,
+          "stopinsert", -- Stop insert mode after restoring session
         },
 
         session_lens = {
