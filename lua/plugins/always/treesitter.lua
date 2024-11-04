@@ -24,6 +24,7 @@ return {
         "helm",
         "php",
         "diff",
+        "nix",
       },
     },
     ---@param opts TSConfig

@@ -36,6 +36,7 @@ return {
         json = { "prettierd", "prettier", stop_after_first = true },
         helm = { "prettierd", "prettier", stop_after_first = true },
         yaml = { "prettierd", "prettier", stop_after_first = true },
+        nix = { "nixfmt", stop_after_first = true },
       },
       -- Set default options
       default_format_opts = {
@@ -138,6 +139,7 @@ return {
         "intelephense",
         "tailwindcss",
         "yamlls",
+        "nil_ls",
       }
 
       -- if helm is installed, add helm_ls to ensure_installed
