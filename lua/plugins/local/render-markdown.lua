@@ -9,7 +9,9 @@ return {
       heading = {
         enabled = false,
       },
-      code = {},
+      code = {
+        language_name = false,
+      },
       sign = {
         enabled = false,
       },
