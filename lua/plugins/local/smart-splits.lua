@@ -59,5 +59,8 @@ return {
         desc = "Swap buffer down",
       },
     },
+    opts = {
+      at_edge = "stop",
+    },
   },
 }
