@@ -1,9 +1,10 @@
 vim.keymap.set(
   {
     "n",
-    "i",
+    "!",
     "x",
     "t",
+    "o",
   },
   "<Char-1105920>",
   function() end,
@@ -15,11 +16,42 @@ vim.keymap.set(
 vim.keymap.set(
   {
     "n",
-    "i",
+    "!",
     "x",
     "t",
+    "o",
   },
   "<Char-1105921>",
+  function() end,
+  {
+    desc = "Capture focus in key",
+  }
+)
+
+vim.keymap.set(
+  {
+    "n",
+    "!",
+    "x",
+    "t",
+    "o",
+  },
+  "<Char-1105923>",
+  function() end,
+  {
+    desc = "Capture focus in key",
+  }
+)
+
+vim.keymap.set(
+  {
+    "n",
+    "!",
+    "x",
+    "t",
+    "o",
+  },
+  "<Char-1105924>",
   function() end,
   {
     desc = "Capture focus in key",
