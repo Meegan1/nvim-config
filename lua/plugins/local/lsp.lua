@@ -139,8 +139,12 @@ return {
         "intelephense",
         "tailwindcss",
         "yamlls",
-        "nil_ls",
       }
+
+      -- Setup nixd for nix files if nixd is installed
+      if vim.fn.executable("nixd") == 1 then
+        require("lspconfig").nixd.setup({})
+      end
 
       -- if helm is installed, add helm_ls to ensure_installed
       if vim.fn.has("helm") == 1 then
