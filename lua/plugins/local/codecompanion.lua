@@ -23,6 +23,13 @@ return {
       strategies = {
         chat = {
           adapter = "copilot",
+          slash_commands = {
+            ["buffer"] = {
+              opts = {
+                provider = "telescope",
+              },
+            },
+          },
         },
         inline = {
           adapter = "copilot",
