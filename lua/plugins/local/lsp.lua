@@ -139,6 +139,7 @@ return {
         "intelephense",
         "tailwindcss",
         "yamlls",
+        "jsonls",
       }
 
       -- Setup nixd for nix files if nixd is installed
