@@ -75,7 +75,7 @@ return {
 
       vim.api.nvim_create_user_command("SaveWithoutFormatting", function()
         vim.cmd("FormatDisable")
-        vim.cmd("w")
+        vim.cmd("noa w")
         vim.cmd("FormatEnable")
       end, {
         desc = "Save without formatting",
