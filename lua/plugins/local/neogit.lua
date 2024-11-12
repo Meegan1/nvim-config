@@ -10,6 +10,7 @@ return {
     opts = {
       disable_insert_on_commit = true,
       graph_style = "unicode",
+      process_spinner = false,
     },
     config = function(_, config)
       local neogit = require("neogit")
