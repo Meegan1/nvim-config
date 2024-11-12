@@ -10,7 +10,6 @@ return {
     },
     opts = {
       open_files_do_not_replace_types = { "terminal", "Trouble", "qf", "edgy" },
-      -- auto_clean_after_session_restore = true,
       filesystem = {
         filtered_items = {
           visible = true,
