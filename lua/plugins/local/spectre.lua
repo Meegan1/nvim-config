@@ -21,6 +21,18 @@ return {
 
       return {
         replace_engine = replace_engine,
+
+        default = {
+          find = {
+            --pick one of item in find_engine
+            cmd = "rg",
+            options = { "ignore-case", "hidden" },
+          },
+          replace = {
+            --pick one of item in replace_engine
+            cmd = "sed",
+          },
+        },
       }
     end,
 
