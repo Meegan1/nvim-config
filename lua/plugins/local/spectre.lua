@@ -4,8 +4,28 @@ return {
     dependencies = {
       "nvim-lua/plenary.nvim",
     },
-    config = function()
-      require("spectre").setup()
+    opts = function()
+      local os = vim.uv.os_uname().sysname
+      local replace_engine = os == "Darwin"
+          and {
+            ["sed"] = {
+              cmd = "sed",
+              args = {
+                "-i",
+                "",
+                "-E",
+              },
+            },
+          }
+          or nil
+
+      return {
+        replace_engine = replace_engine,
+      }
+    end,
+
+    config = function(_, opts)
+      require("spectre").setup(opts)
     end,
 
     keys = {
