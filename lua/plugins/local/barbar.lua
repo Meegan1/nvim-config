@@ -9,6 +9,7 @@ return {
       exclude_ft = {
         "codecompanion",
         "qf",
+        "spectre_panel",
       },
     },
     dependencies = {
