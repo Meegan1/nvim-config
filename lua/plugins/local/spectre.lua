@@ -22,11 +22,50 @@ return {
       return {
         replace_engine = replace_engine,
 
+        mapping = {
+          ["toggle_ignore_gitignore"] = {
+            map = "tg",
+            cmd = "<cmd>lua require('spectre').change_options('gitignore')<CR>",
+            desc = "toggle search gitignored files",
+          },
+          ["toggle_ignore_artifacts"] = {
+            map = "ta",
+            cmd = "<cmd>lua require('spectre').change_options('artifacts')<CR>",
+            desc = "toggle ignore artifacts",
+          },
+        },
+
+        find_engine = {
+          ["rg"] = {
+            options = {
+              ["hidden"] = {
+                value = {
+                  "--hidden", -- search hidden files
+                },
+              },
+              ["gitignore"] = {
+                value = {
+                  "-u", -- search git ignored files
+                },
+                icon = "[G]",
+                desc = "search gitignored files",
+              },
+              ["artifacts"] = {
+                value = {
+                  "--glob=!{.git,node_modules,.nx,.next,dist,coverage}", -- ignore artifacts
+                },
+                icon = "[A]",
+                desc = "ignore artifacts",
+              },
+            },
+          },
+        },
+
         default = {
           find = {
             --pick one of item in find_engine
             cmd = "rg",
-            options = { "ignore-case", "hidden" },
+            options = { "ignore-case", "hidden", "gitignore", "artifacts" },
           },
           replace = {
             --pick one of item in replace_engine
@@ -72,7 +111,7 @@ return {
 
     keys = {
       {
-        "<leader>SS",
+        "<leader>ss",
         function()
           local spectre_state = require("spectre.actions").get_state()
 
@@ -90,7 +129,7 @@ return {
         desc = "Toggle Spectre",
       },
       {
-        "<leader>Sw",
+        "<leader>sw",
         function()
           require("spectre").open_visual({ select_word = true })
         end,
@@ -98,7 +137,7 @@ return {
         desc = "Search current word",
       },
       {
-        "<leader>Sw",
+        "<leader>sw",
         function()
           require("spectre").open_visual()
         end,
@@ -106,7 +145,7 @@ return {
         desc = "Search current word",
       },
       {
-        "<leader>Sp",
+        "<leader>sp",
         function()
           require("spectre").open_file_search({ select_word = true })
         end,
