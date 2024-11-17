@@ -111,7 +111,7 @@ return {
 
     keys = {
       {
-        "<leader>ss",
+        "<leader>ff",
         function()
           local spectre_state = require("spectre.actions").get_state()
 
@@ -129,28 +129,28 @@ return {
         desc = "Toggle Spectre",
       },
       {
-        "<leader>sw",
+        "<leader>fw",
         function()
           require("spectre").open_visual({ select_word = true })
         end,
         mode = "n",
-        desc = "Search current word",
+        desc = "Find current word",
       },
       {
-        "<leader>sw",
+        "<leader>fw",
         function()
           require("spectre").open_visual()
         end,
         mode = "v",
-        desc = "Search current word",
+        desc = "Find current word",
       },
       {
-        "<leader>sp",
+        "<leader>fp",
         function()
           require("spectre").open_file_search({ select_word = true })
         end,
         mode = "n",
-        desc = "Search on current file",
+        desc = "Find on current file",
       },
     },
   },
