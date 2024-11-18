@@ -10,10 +10,6 @@ return {
         lineFoldingOnly = true,
       }
 
-      local Config = require("noice.config")
-      local Docs = require("noice.lsp.docs")
-      local Format = require("noice.lsp.format")
-
       require("typescript-tools").setup({
         capabilities = capabilities,
         on_attach = function(client, bufnr)
