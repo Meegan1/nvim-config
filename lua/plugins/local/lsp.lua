@@ -175,6 +175,7 @@ return {
                   vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
                 end
               end,
+              root_dir = require("lspconfig/util").root_pattern(".git", "package.json") or vim.loop.cwd(),
             }
 
             if server_name == "ts_ls" then
