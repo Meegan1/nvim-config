@@ -39,10 +39,6 @@ return {
         yaml = { "prettierd", "prettier", stop_after_first = true },
         nix = { "nixfmt", stop_after_first = true },
       },
-      -- Set default options
-      default_format_opts = {
-        lsp_format = "fallback",
-      },
       -- Set up format-on-save
       format_on_save = function(bufnr)
         -- Disable with a global or buffer-local variable
@@ -50,7 +46,7 @@ return {
           return
         end
 
-        return { timeout_ms = 1000 }
+        return { timeout_ms = 1000, lsp_format = "fallback" }
       end,
     },
     ---@param opts ConformOpts
@@ -116,7 +112,6 @@ return {
         -- see :help lsp-zero-keybindings
         -- to learn the available actions
         lsp_zero.default_keymaps({ buffer = bufnr })
-        lsp_zero.buffer_autoformat()
 
         -- bind gh to vim.lsp.buf.hover()
         vim.keymap.set("n", "gh", function()
