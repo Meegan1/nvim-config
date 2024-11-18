@@ -17,6 +17,8 @@ return {
         "scss",
         "graphql",
         "bash",
+        "liquid",
+        "vue",
         "markdown",
         "markdown_inline",
         "regex",

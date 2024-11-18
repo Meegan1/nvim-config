@@ -33,6 +33,7 @@ return {
         typescript = { "prettierd", "prettier", stop_after_first = true },
         typescriptreact = { "prettierd", "prettier", stop_after_first = true },
         javascriptreact = { "prettierd", "prettier", stop_after_first = true },
+        liquid = { "prettierd", "prettier", stop_after_first = true },
         json = { "prettierd", "prettier", stop_after_first = true },
         helm = { "prettierd", "prettier", stop_after_first = true },
         yaml = { "prettierd", "prettier", stop_after_first = true },
@@ -140,6 +141,7 @@ return {
         "tailwindcss",
         "yamlls",
         "jsonls",
+        "shopify_theme_ls",
       }
 
       -- Setup nixd for nix files if nixd is installed
