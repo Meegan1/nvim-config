@@ -123,7 +123,7 @@ return {
 				callback = function(event)
 					local bufnr = event.buf
 
-					vim.keymap.set("n", "gb", vim.lsp.buf.hover, { desc = "Show LSP Info", buffer = bufnr })
+					vim.keymap.set("n", "gh", vim.lsp.buf.hover, { desc = "Show LSP Info", buffer = bufnr })
 					vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "Open LSP Definition", buffer = bufnr })
 					vim.keymap.set(
 						"n",
@@ -144,11 +144,6 @@ return {
 						vim.lsp.buf.signature_help,
 						{ desc = "Open Signature Help", buffer = bufnr }
 					)
-
-					-- bind gh to vim.lsp.buf.hover()
-					vim.keymap.set("n", "gh", function()
-						vim.lsp.buf.hover()
-					end, { buffer = bufnr, desc = "Show hover doc" })
 				end,
 
 				-- bind <Esc> to close the hover buffer
