@@ -243,6 +243,17 @@ return {
 							})
 						end
 
+						if server_name == "jsonls" then
+							opts = vim.tbl_extend("force", opts, {
+								settings = {
+									json = {
+										schemas = require("schemastore").json.schemas(),
+										validate = { enable = true },
+									},
+								},
+							})
+						end
+
 						if server_name == "helm_ls" then
 							opts = vim.tbl_extend("force", opts, {
 								settings = {
