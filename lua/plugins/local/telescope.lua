@@ -7,7 +7,7 @@ return {
 					mappings = {
 						n = {
 							["l"] = require("telescope.actions").select_default,
-							["<D-.>"] = require("telescope.actions").select_default,
+							["<C-.>"] = require("telescope.actions").select_default,
 						},
 					},
 				},
@@ -16,24 +16,24 @@ return {
 		config = function(_, opts)
 			require("telescope").setup(opts)
 
-			vim.keymap.set({ "n", "i", "v" }, "<D-p>", function()
+			vim.keymap.set({ "n", "i", "v" }, "<C-p>", function()
 				require("telescope.builtin").find_files({
 					find_command = { "rg", "--files", "--hidden", "-g", "!.git" },
 				})
 			end)
 
-			vim.keymap.set({ "n", "i", "v" }, "<D-P>", function()
+			vim.keymap.set({ "n", "i", "v" }, "<C-S-P>", function()
 				require("telescope.builtin").commands()
 			end)
 
-			vim.keymap.set("n", "<D-F>", function()
+			vim.keymap.set("n", "<C-S-F>", function()
 				require("telescope.builtin").live_grep({
 					file_ignore_patterns = { ".git" },
 					additional_args = { "--hidden" },
 				})
 			end)
 
-			vim.keymap.set("n", "<D-t>", function()
+			vim.keymap.set("n", "<C-t>", function()
 				require("telescope.builtin").lsp_workspace_symbols()
 			end)
 		end,
