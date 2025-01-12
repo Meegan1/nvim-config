@@ -23,64 +23,6 @@ return {
 			})
 		end,
 	},
-	{
-		"stevearc/conform.nvim",
-		opts = {
-			-- Define your formatters
-			formatters_by_ft = {
-				lua = { "stylua" },
-				javascript = { "prettierd", "prettier", stop_after_first = true },
-				typescript = { "prettierd", "prettier", stop_after_first = true },
-				typescriptreact = { "prettierd", "prettier", stop_after_first = true },
-				javascriptreact = { "prettierd", "prettier", stop_after_first = true },
-				liquid = { "prettierd", "prettier", stop_after_first = true },
-				json = { "prettierd", "prettier", stop_after_first = true },
-				helm = { "prettierd", "prettier", stop_after_first = true },
-				yaml = { "prettierd", "prettier", stop_after_first = true },
-				nix = { "nixfmt", stop_after_first = true },
-			},
-			-- Set up format-on-save
-			format_on_save = function(bufnr)
-				-- Disable with a global or buffer-local variable
-				if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
-					return
-				end
-
-				return { timeout_ms = 1000, lsp_format = "fallback" }
-			end,
-		},
-		---@param opts ConformOpts
-		config = function(_, opts)
-			vim.api.nvim_create_user_command("FormatDisable", function(args)
-				if args.bang then
-					-- FormatDisable! will disable formatting just for this buffer
-					vim.b.disable_autoformat = true
-				else
-					vim.g.disable_autoformat = true
-				end
-			end, {
-				desc = "Disable autoformat-on-save",
-				bang = true,
-			})
-
-			vim.api.nvim_create_user_command("FormatEnable", function()
-				vim.b.disable_autoformat = false
-				vim.g.disable_autoformat = false
-			end, {
-				desc = "Re-enable autoformat-on-save",
-			})
-
-			vim.api.nvim_create_user_command("SaveWithoutFormatting", function()
-				vim.cmd("FormatDisable")
-				vim.cmd("noa w")
-				vim.cmd("FormatEnable")
-			end, {
-				desc = "Save without formatting",
-			})
-
-			require("conform").setup(opts)
-		end,
-	},
 	{ "williamboman/mason-lspconfig.nvim" },
 	{
 		"VonHeikemen/lsp-zero.nvim",
@@ -98,7 +40,6 @@ return {
 		cmd = { "LspInfo", "LspInstall", "LspStart" },
 		event = { "BufReadPre", "BufNewFile" },
 		dependencies = {
-			{ "hrsh7th/cmp-nvim-lsp" },
 			{ "williamboman/mason-lspconfig.nvim" },
 			{ "folke/which-key.nvim" },
 		},
@@ -272,137 +213,7 @@ return {
 			})
 		end,
 	},
-	{
-		"luckasRanarison/tailwind-tools.nvim",
-		name = "tailwind-tools",
-		build = ":UpdateRemotePlugins",
-		branch = "master",
-		dependencies = {
-			"nvim-treesitter/nvim-treesitter",
-			"nvim-telescope/telescope.nvim",
-			"neovim/nvim-lspconfig",
-		},
-		opts = {
-			server = {
-				settings = {
-					settings = {
-						experimental = {
-							classRegex = {
-								"\\/\\*\\s*tw\\s*\\*\\/\\s*[`'\"](.*)[`'\"];?",
-								{ "(?:twMerge|twJoin)\\(([^\\);]*)[\\);]", "[`'\"]([^'\"`,;]*)[`'\"]" },
-								"twc\\`(.*)\\`;?",
-								{ "cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]" },
-								{ "cx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)" },
-							},
-						},
-					},
-				},
-			},
-		},
-		config = function(_, opts)
-			require("tailwind-tools").setup(opts)
-		end,
-	},
-	{ "hrsh7th/cmp-nvim-lsp" },
-	{
-		"folke/lazydev.nvim",
-		ft = "lua", -- only load on lua files
-		opts = {
-			library = {
-				-- Load luvit types when the `vim.uv` word is found
-				{ path = "luvit-meta/library", words = { "vim%.uv" } },
-			},
-		},
-	},
 	{ "Bilal2453/luvit-meta", lazy = true },
-	{
-		"onsails/lspkind.nvim",
-	},
-	{
-		"hrsh7th/nvim-cmp",
-		version = false, -- last release is way too old
-		event = "InsertEnter",
-		dependencies = {
-			"hrsh7th/cmp-nvim-lsp",
-			"hrsh7th/cmp-buffer",
-			"hrsh7th/cmp-path",
-			"L3MON4D3/LuaSnip",
-			"windwp/nvim-autopairs",
-			"luckasRanarison/tailwind-tools.nvim",
-		},
-		config = function()
-			-- Here is where you configure the autocompletion settings.
-			local lsp_zero = require("lsp-zero")
-			lsp_zero.extend_cmp()
-
-			-- And you can configure cmp even more, if you want to.
-			local cmp = require("cmp")
-			local cmp_action = lsp_zero.cmp_action()
-
-			-- Autopairs when selecting a autocompletion
-			local cmp_autopairs = require("nvim-autopairs.completion.cmp")
-			cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
-
-			cmp.setup({
-				auto_brackets = {}, -- configure any filetype to auto add brackets
-				completion = {
-					completeopt = "menu,menuone,noinsert",
-				},
-				-- formatting = lsp_zero.cmp_format({ details = true }),
-				mapping = cmp.mapping.preset.insert({
-					["<C-Space>"] = cmp.mapping.complete(),
-					["<C-u>"] = cmp.mapping.scroll_docs(-4),
-					["<C-d>"] = cmp.mapping.scroll_docs(4),
-					["<C-f>"] = cmp_action.luasnip_jump_forward(),
-					["<C-b>"] = cmp_action.luasnip_jump_backward(),
-					["<CR>"] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-					["<S-Esc>"] = cmp.mapping.close(),
-
-					["<C-k>"] = cmp.mapping.select_prev_item({ behavior = "select" }),
-					["<C-j>"] = cmp.mapping.select_next_item({ behavior = "select" }),
-					["<C-l>"] = cmp.mapping.confirm({ select = true }),
-				}),
-				snippet = {
-					expand = function(args)
-						require("luasnip").lsp_expand(args.body)
-					end,
-				},
-				sources = cmp.config.sources({
-					{ name = "nvim_lsp" },
-					{ name = "vim-dadbod-completion" },
-					{ name = "path" },
-					{ name = "buffer" },
-					{
-						name = "lazydev",
-						group_index = 0,
-					},
-				}),
-				window = {
-					completion = cmp.config.window.bordered(),
-					documentation = cmp.config.window.bordered(),
-				},
-				-- here is where the change happens
-				format = function(entry, item)
-					local menu_icon = {
-						nvim_lsp = "λ",
-						luasnip = "⋗",
-						buffer = "Ω",
-						path = "🖫",
-						nvim_lua = "Π",
-					}
-
-					item.menu = menu_icon[entry.source.name]
-					return item
-				end,
-				formatting = {
-					format = require("lspkind").cmp_format({
-						before = require("tailwind-tools.cmp").lspkind_format,
-					}),
-				},
-			})
-		end,
-	},
-	{ "L3MON4D3/LuaSnip" },
 	{
 		"towolf/vim-helm",
 	},
