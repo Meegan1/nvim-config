@@ -74,8 +74,40 @@ return {
 				["<C-b>"] = { "scroll_documentation_up", "fallback" },
 				["<C-f>"] = { "scroll_documentation_down", "fallback" },
 
-				["<Tab>"] = { "snippet_forward", "fallback" },
-				["<S-Tab>"] = { "snippet_backward", "fallback" },
+				["<Tab>"] = {
+					function(cmp)
+						-- if in command mode, select next item
+						if vim.api.nvim_get_mode().mode == "c" then
+							cmp.select_next()
+							return true
+						end
+					end,
+					"snippet_forward",
+					"fallback",
+				},
+
+				["<Char-1106366>"] = {
+					function(cmp)
+						-- if in command mode, select previous item
+						if vim.api.nvim_get_mode().mode == "c" then
+							cmp.select_prev()
+							return true
+						end
+					end,
+					"snippet_backward",
+					"fallback",
+				},
+				["<S-Tab>"] = {
+					function(cmp)
+						-- if in command mode, select previous item
+						if vim.api.nvim_get_mode().mode == "c" then
+							cmp.select_prev()
+							return true
+						end
+					end,
+					"snippet_backward",
+					"fallback",
+				},
 			},
 		},
 		opts_extend = { "sources.default" },

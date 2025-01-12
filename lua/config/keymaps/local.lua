@@ -6,6 +6,10 @@ vim.keymap.set("n", "gT", function()
 	vim.cmd("BufferPrevious")
 end)
 
+vim.keymap.set({
+	"i",
+}, "<Char-1106366>", "<C-d>")
+
 -- map shift + tab to indent left
 vim.keymap.set("i", "<S-Tab>", "<C-d>")
 

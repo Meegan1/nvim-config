@@ -23,6 +23,8 @@ return {
 					which_key = true,
 					neogit = true,
 					dadbod_ui = true,
+					notify = true,
+					mini = true,
 				},
 			})
 
