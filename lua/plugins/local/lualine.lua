@@ -86,10 +86,10 @@ return {
 							end,
 							color = { fg = "#f8f8f2", bg = "#282a36" },
 						},
-						"copilot",
 						{
 							CodeCompanionStatus,
 						},
+						"copilot",
 						"filetype",
 					},
 					lualine_y = { "progress" },
