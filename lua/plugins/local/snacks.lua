@@ -13,9 +13,25 @@ return {
 
 				top_down = false,
 			},
+
+			indent = {
+				enabled = true,
+				indent = {
+					char = "▎",
+				},
+
+				scope = {
+					char = "▎",
+				},
+
+				animate = {
+					enabled = false,
+				},
+			},
 		},
 		config = function(_, config)
 			require("snacks").setup(config)
+			local C = require("catppuccin.palettes").get_palette()
 
 			-- create command Notifications to show the notifications
 			vim.api.nvim_create_user_command("Notifications", function()
@@ -23,6 +39,9 @@ return {
 			end, {
 				desc = "Show notifications",
 			})
+
+			vim.api.nvim_set_hl(0, "SnacksIndent", { fg = C.surface0 })
+			vim.api.nvim_set_hl(0, "SnacksIndentScope", { fg = "#3b4261" })
 		end,
 	},
 }
