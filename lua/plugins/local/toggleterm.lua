@@ -36,7 +36,7 @@ return {
 				lazygit:toggle()
 			end
 
-			vim.keymap.set({ "n", "i", "v", "t" }, "<C-g>", _lazygit_toggle, { noremap = true, silent = true })
+			vim.keymap.set({ "n", "i", "v", "t" }, "<C-S-g>", _lazygit_toggle, { noremap = true, silent = true })
 		end,
 	},
 }
