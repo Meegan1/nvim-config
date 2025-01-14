@@ -3,8 +3,6 @@ return {
 	dependencies = {
 		"nvim-lua/plenary.nvim",
 		"nvim-treesitter/nvim-treesitter",
-		"nvim-telescope/telescope.nvim", -- Optional: For using slash commands
-		{ "stevearc/dressing.nvim", opts = {} }, -- Optional: Improves `vim.ui.select`
 	},
 	config = function(_, config)
 		require("codecompanion").setup(vim.tbl_extend("force", {
@@ -25,7 +23,7 @@ return {
 					slash_commands = {
 						["buffer"] = {
 							opts = {
-								provider = "telescope",
+								provider = "fzf_lua",
 							},
 						},
 					},

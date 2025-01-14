@@ -8,7 +8,6 @@ return {
 				integrations = {
 					blink_cmp = true,
 					mason = true,
-					telescope = true,
 					gitsigns = true,
 					treesitter = true,
 					noice = true,
@@ -22,6 +21,7 @@ return {
 					notify = true,
 					mini = true,
 					snacks = true,
+					fzf = true,
 				},
 			})
 

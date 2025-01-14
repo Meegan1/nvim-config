@@ -6,7 +6,6 @@ return {
 		branch = "master",
 		dependencies = {
 			"nvim-treesitter/nvim-treesitter",
-			"nvim-telescope/telescope.nvim",
 			"neovim/nvim-lspconfig",
 		},
 		opts = {
