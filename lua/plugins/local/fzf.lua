@@ -90,6 +90,11 @@ return {
 				require("fzf-lua").commands()
 			end)
 
+			-- Search in current file
+			vim.keymap.set("n", "<C-f>", function()
+				require("fzf-lua").blines()
+			end)
+
 			-- Live grep with hidden files
 			vim.keymap.set("n", "<C-S-F>", function()
 				require("fzf-lua").live_grep({
