@@ -96,8 +96,8 @@ return {
 				vim.cmd("Neotree toggle")
 			end)
 
-			-- bind <C-A-M-f> to find file in neotree
-			vim.keymap.set({ "n", "i", "v" }, "<C-f>", function()
+			-- bind <C-A-F> to find file in neotree
+			vim.keymap.set({ "n", "i", "v" }, "<C-A-f>", function()
 				vim.cmd("Neotree reveal")
 			end)
 		end,
