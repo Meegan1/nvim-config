@@ -100,6 +100,7 @@ return {
 				require("fzf-lua").live_grep({
 					hidden = true,
 					no_ignore = true,
+					rg_opts = "-g '!**/{dist,vendor,node_modules,coverage,.next,.nx}/**'",
 				})
 			end)
 
