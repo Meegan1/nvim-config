@@ -14,6 +14,8 @@ return {
 				helm = { "prettierd", "prettier", stop_after_first = true },
 				yaml = { "prettierd", "prettier", stop_after_first = true },
 				nix = { "nixfmt", stop_after_first = true },
+				blade = { "prettierd", "prettier", stop_after_first = true },
+				php = { "prettierd", "prettier", stop_after_first = true },
 			},
 			-- Set up format-on-save
 			format_on_save = function(bufnr)
