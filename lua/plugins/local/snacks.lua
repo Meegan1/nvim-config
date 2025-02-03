@@ -33,6 +33,9 @@ return {
 			require("snacks").setup(config)
 			local C = require("catppuccin.palettes").get_palette()
 
+			vim.api.nvim_set_hl(0, "SnacksIndent", { fg = C.surface0 })
+			vim.api.nvim_set_hl(0, "SnacksIndentScope", { fg = "#3b4261" })
+
 			-- create command Notifications to show the notifications
 			vim.api.nvim_create_user_command("Notifications", function()
 				require("snacks").notifier.show_history()
@@ -40,8 +43,44 @@ return {
 				desc = "Show notifications",
 			})
 
-			vim.api.nvim_set_hl(0, "SnacksIndent", { fg = C.surface0 })
-			vim.api.nvim_set_hl(0, "SnacksIndentScope", { fg = "#3b4261" })
+			-- create command BufferDelete to delete the current buffer
+			vim.api.nvim_create_user_command("BufferDelete", function()
+				require("snacks").bufdelete.delete()
+
+				require("snacks").notifier.notify("Buffer deleted", "info")
+			end, {
+				desc = "Delete current buffer",
+			})
+
+			-- create command BufferDeleteAll to delete all buffers
+			vim.api.nvim_create_user_command("BufferDeleteAll", function()
+				require("snacks").bufdelete.all()
+
+				require("snacks").notifier.notify("All buffers deleted", "info")
+			end, {
+				desc = "Delete all buffers",
+			})
+
+			-- create command BufferDeleteOther to delete all buffers except the current one
+			vim.api.nvim_create_user_command("BufferDeleteOther", function()
+				require("snacks").bufdelete.other()
+
+				require("snacks").notifier.notify("All other buffers deleted", "info")
+			end, {
+				desc = "Delete all buffers except the current one",
+			})
+
+			vim.keymap.set({ "n", "v" }, "<leader>bdd", function()
+				vim.cmd("BufferDelete")
+			end, { noremap = true, desc = "Delete Buffer" })
+
+			vim.keymap.set({ "n", "v" }, "<leader>bda", function()
+				vim.cmd("BufferDeleteAll")
+			end, { noremap = true, desc = "Delete all buffers" })
+
+			vim.keymap.set({ "n", "v" }, "<leader>bdo", function()
+				vim.cmd("BufferDeleteOther")
+			end, { noremap = true, desc = "Delete all buffers except the current one" })
 		end,
 	},
 }
