@@ -70,15 +70,15 @@ return {
 				desc = "Delete all buffers except the current one",
 			})
 
-			vim.keymap.set({ "n", "v" }, "<leader>bdd", function()
+			vim.keymap.set({ "n", "v" }, "<leader>dd", function()
 				vim.cmd("BufferDelete")
 			end, { noremap = true, desc = "Delete Buffer" })
 
-			vim.keymap.set({ "n", "v" }, "<leader>bda", function()
+			vim.keymap.set({ "n", "v" }, "<leader>da", function()
 				vim.cmd("BufferDeleteAll")
 			end, { noremap = true, desc = "Delete all buffers" })
 
-			vim.keymap.set({ "n", "v" }, "<leader>bdo", function()
+			vim.keymap.set({ "n", "v" }, "<leader>do", function()
 				vim.cmd("BufferDeleteOther")
 			end, { noremap = true, desc = "Delete all buffers except the current one" })
 		end,
