@@ -103,9 +103,16 @@ return {
 			{
 				"<leader>to",
 				function()
-					require("neotest").output_panel.toggle()
+					require("neotest").output.open()
 				end,
 				desc = "toggle neotest output",
+			},
+			{
+				"<leader>tO",
+				function()
+					require("neotest").output_panel.toggle()
+				end,
+				desc = "toggle neotest output panel",
 			},
 		},
 	},
