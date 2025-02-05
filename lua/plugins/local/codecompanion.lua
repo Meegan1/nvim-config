@@ -1,3 +1,24 @@
+-- Get the current buffer's path relative to project root
+local function get_relative_path()
+	-- Try to get the root directory using LSP workspace folders first
+	local root = vim.lsp.buf.list_workspace_folders()[1]
+
+	if not root then
+		-- Fallback: try to find git root
+		root = vim.fn.systemlist("git rev-parse --show-toplevel")[1]
+	end
+
+	if not root then
+		-- If no root found, return the full path
+		return vim.fn.expand("%:p")
+	end
+
+	-- Get absolute path of current buffer
+	local absolute_path = vim.fn.expand("%:p")
+	-- Make it relative to the root
+	return vim.fn.fnamemodify(absolute_path, ":~:." .. root .. "/")
+end
+
 return {
 	"olimorris/codecompanion.nvim",
 	dependencies = {
@@ -52,117 +73,27 @@ return {
 				vim.cmd("CodeCompanionChat Add")
 			else
 				local Chat = require("codecompanion").last_chat()
-				local codecompanion_config = require("codecompanion.config")
-				local buf = require("codecompanion.utils.buffers")
-				local file_utils = require("codecompanion.utils.files")
 
-				-- Add the current buffer to the chat using vim api
-				local current_buffer = vim.api.nvim_get_current_buf()
-				local name = vim.api.nvim_buf_get_name(current_buffer):match("([^/]+)$")
-				local path = vim.api.nvim_buf_get_name(current_buffer)
-				local selected = {
-					bufnr = current_buffer,
-					name = name,
-					path = path,
-				}
-
-				local content
-				if not vim.api.nvim_buf_is_loaded(selected.bufnr) then
-					content = file_utils.read(selected.path)
-					if content == "" then
-						return log:warn("Could not read the file: %s", selected.path)
-					end
-					content = "```" .. file_utils.get_filetype(selected.path) .. "\n" .. content .. "\n```"
-				else
-					content = buf.format(selected.bufnr)
+				if not Chat then
+					return vim.notify("No chat found", vim.log.levels.ERROR)
 				end
 
-				Chat:add_message({
-					role = codecompanion_config.constants.USER_ROLE,
-					content = string.format(
-						[[Here is the content from %s (which has a buffer number of _%d_ and a filepath of `%s`):
+				local path = get_relative_path()
+				local file = vim.api.nvim_buf_get_name(0)
 
-                %s]],
-						selected.name,
-						selected.bufnr,
-						selected.path,
-						content
-					),
-				}, { visible = false })
-				vim.notify(string.format("Buffer `%s` content added to the chat", selected.name), vim.log.levels.INFO)
+				local id = "<file>" .. path .. "</file>"
+
+				Chat.references:add({
+					id = id,
+					path = path,
+					source = "codecompanion.strategies.chat.slash_commands.file",
+					opts = {
+						pinned = true,
+					},
+				})
+
+				vim.notify(string.format("File `%s` content added to the chat", file), vim.log.levels.INFO)
 			end
 		end, { noremap = true, silent = true, desc = "Add the current buffer to the chat" })
-
-		vim.keymap.set({ "n" }, "<leader>cd", function()
-			local chat = require("codecompanion").last_chat()
-
-			if not chat then
-				return
-			end
-
-			local messages = chat.messages
-			if not messages or #messages == 0 then
-				vim.notify("No messages to delete", vim.log.levels.INFO)
-				return
-			end
-
-			local entries = {}
-			for i, message in ipairs(messages) do
-				table.insert(entries, { index = i, content = message.content })
-			end
-
-			-- Reverse the order of the messages so that the most recent message is at the top
-			table.sort(entries, function(a, b)
-				return a.index > b.index
-			end)
-
-			local previewers = require("telescope.previewers")
-
-			require("telescope.pickers")
-				.new({}, {
-					prompt_title = "Select Message to Remove",
-					finder = require("telescope.finders").new_table({
-						results = entries,
-						entry_maker = function(entry)
-							return {
-								value = entry,
-								display = entry.content:gsub("\n", " "),
-								index = entry.index,
-								ordinal = entry.content,
-							}
-						end,
-					}),
-					previewer = previewers.new_buffer_previewer({
-						define_preview = function(self, entry, status)
-							vim.api.nvim_buf_set_lines(
-								self.state.bufnr,
-								0,
-								-1,
-								false,
-								vim.split(entry.value.content, "\n")
-							)
-						end,
-					}),
-					sorter = require("telescope.config").values.generic_sorter({}),
-					attach_mappings = function(prompt_bufnr)
-						local actions = require("telescope.actions")
-						local action_state = require("telescope.actions.state")
-
-						actions.select_default:replace(function()
-							local selection = action_state.get_selected_entry()
-							actions.close(prompt_bufnr)
-
-							if selection then
-								table.remove(chat.messages, selection.value.index)
-								vim.notify("Message removed: " .. selection.value.index, vim.log.levels.INFO)
-								chat:render()
-							end
-						end)
-
-						return true
-					end,
-				})
-				:find()
-		end, { noremap = true, silent = true, desc = "Delete a message from the chat" })
 	end,
 }
