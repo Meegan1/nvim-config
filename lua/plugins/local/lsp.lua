@@ -53,12 +53,6 @@ return {
 			vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Goto previous LSP Diagnostic" })
 			vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Goto next LSP Diagnostic" })
 
-			-- Remove default neovim lsp mappings
-			vim.keymap.del("n", "gra")
-			vim.keymap.del("n", "gri")
-			vim.keymap.del("n", "grn")
-			vim.keymap.del("n", "grr")
-
 			vim.api.nvim_create_autocmd("LspAttach", {
 				desc = "LSP actions",
 				callback = function(event)
