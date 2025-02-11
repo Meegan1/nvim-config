@@ -6,7 +6,7 @@ return {
 
 			-- Check if eslint_d is installed locally and use it if it is
 			local eslint_d_installed = vim.fn.filereadable("node_modules/.bin/eslint_d")
-			local eslint = eslint_d_installed and "eslint_d" or "eslint"
+			local eslint = eslint_d_installed == 1 and "eslint_d" or "eslint"
 			if eslint_d_installed then
 				vim.env.ESLINT_D_PPID = vim.fn.getpid()
 			end
@@ -40,7 +40,7 @@ return {
 				callback = function()
 					-- try_lint without arguments runs the linters defined in `linters_by_ft`
 					-- for the current filetype
-					require("lint").try_lint()
+					lint.try_lint()
 				end,
 			})
 
