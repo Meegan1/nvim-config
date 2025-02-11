@@ -19,6 +19,7 @@ return {
 				ensure_installed = {
 					"stylua",
 					"prettierd",
+					"dprint",
 				},
 			})
 		end,

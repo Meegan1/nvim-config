@@ -5,17 +5,17 @@ return {
 			-- Define your formatters
 			formatters_by_ft = {
 				lua = { "stylua" },
-				javascript = { "prettierd", "prettier", stop_after_first = true },
-				typescript = { "prettierd", "prettier", stop_after_first = true },
-				typescriptreact = { "prettierd", "prettier", stop_after_first = true },
-				javascriptreact = { "prettierd", "prettier", stop_after_first = true },
-				liquid = { "prettierd", "prettier", stop_after_first = true },
-				json = { "prettierd", "prettier", stop_after_first = true },
-				helm = { "prettierd", "prettier", stop_after_first = true },
-				yaml = { "prettierd", "prettier", stop_after_first = true },
+				javascript = { "dprint", "prettierd", "prettier", stop_after_first = true },
+				typescript = { "dprint", "prettierd", "prettier", stop_after_first = true },
+				typescriptreact = { "dprint", "prettierd", "prettier", stop_after_first = true },
+				javascriptreact = { "dprint", "prettierd", "prettier", stop_after_first = true },
+				liquid = { "dprint", "prettierd", "prettier", stop_after_first = true },
+				json = { "dprint", "prettierd", "prettier", stop_after_first = true },
+				helm = { "dprint", "prettierd", "prettier", stop_after_first = true },
+				yaml = { "dprint", "prettierd", "prettier", stop_after_first = true },
 				nix = { "nixfmt", stop_after_first = true },
-				blade = { "prettierd", "prettier", stop_after_first = true },
-				php = { "prettierd", "prettier", stop_after_first = true },
+				blade = { "dprint", "prettierd", "prettier", stop_after_first = true },
+				php = { "dprint", "prettierd", "prettier", stop_after_first = true },
 			},
 			-- Set up format-on-save
 			format_on_save = function(bufnr)
