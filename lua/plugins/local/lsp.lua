@@ -101,7 +101,7 @@ return {
 				"yamlls",
 				"jsonls",
 				"shopify_theme_ls",
-				"twiggy-language-server",
+				"twiggy_language_server",
 			}
 
 			-- Setup nixd for nix files if nixd is installed
