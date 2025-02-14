@@ -28,6 +28,7 @@ return {
 				"diff",
 				"nix",
 				"blade",
+				"twig",
 			},
 		},
 		---@param opts TSConfig

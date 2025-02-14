@@ -1,32 +1,56 @@
 return {
 	{
 		"stevearc/conform.nvim",
-		opts = {
-			-- Define your formatters
-			formatters_by_ft = {
-				lua = { "stylua" },
-				javascript = { "dprint", "prettierd", "prettier", stop_after_first = true },
-				typescript = { "dprint", "prettierd", "prettier", stop_after_first = true },
-				typescriptreact = { "dprint", "prettierd", "prettier", stop_after_first = true },
-				javascriptreact = { "dprint", "prettierd", "prettier", stop_after_first = true },
-				liquid = { "dprint", "prettierd", "prettier", stop_after_first = true },
-				json = { "dprint", "prettierd", "prettier", stop_after_first = true },
-				helm = { "dprint", "prettierd", "prettier", stop_after_first = true },
-				yaml = { "dprint", "prettierd", "prettier", stop_after_first = true },
-				nix = { "nixfmt", stop_after_first = true },
-				blade = { "dprint", "prettierd", "prettier", stop_after_first = true },
-				php = { "dprint", "prettierd", "prettier", stop_after_first = true },
-			},
-			-- Set up format-on-save
-			format_on_save = function(bufnr)
-				-- Disable with a global or buffer-local variable
-				if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
-					return
-				end
+		opts = function()
+			local devenv = require("utils.dev-env")
+			local file_exists = require("utils.file-exists")
 
-				return { timeout_ms = 1000, lsp_format = "fallback" }
-			end,
-		},
+			local prettier = devenv.create_libs_table({
+				devenv.check_lib("dprint", function()
+					return file_exists({
+						"dprint.toml",
+						"dprint.json",
+					})
+				end),
+				devenv.check_lib("prettierd", function()
+					return true
+				end),
+				devenv.check_lib("prettier", function()
+					return true
+				end),
+			}, function(table)
+				table.stop_after_first = true
+
+				return table
+			end)
+
+			return {
+				-- Define your formatters
+				formatters_by_ft = {
+					lua = { "stylua" },
+					javascript = prettier,
+					typescript = prettier,
+					typescriptreact = prettier,
+					javascriptreact = prettier,
+					liquid = prettier,
+					json = prettier,
+					helm = prettier,
+					yaml = prettier,
+					nix = { "nixfmt", stop_after_first = true },
+					blade = prettier,
+					php = prettier,
+				},
+				-- Set up format-on-save
+				format_on_save = function(bufnr)
+					-- Disable with a global or buffer-local variable
+					if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
+						return
+					end
+
+					return { timeout_ms = 1000, lsp_format = "fallback" }
+				end,
+			}
+		end,
 		---@param opts ConformOpts
 		config = function(_, opts)
 			vim.api.nvim_create_user_command("FormatDisable", function(args)

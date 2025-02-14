@@ -2,27 +2,25 @@ return {
 	{
 		"mfussenegger/nvim-lint",
 		config = function(_, opts)
+			local devenv = require("utils.dev-env")
+			local file_exists = require("utils.file-exists")
 			local lint = require("lint")
 
-			-- Check if eslint_d is installed locally and use it if it is
-			local eslint_d_installed = vim.fn.filereadable("node_modules/.bin/eslint_d")
-			local eslint = eslint_d_installed == 1 and "eslint_d" or "eslint"
-			if eslint_d_installed then
-				vim.env.ESLINT_D_PPID = vim.fn.getpid()
-			end
+			local eslint = devenv.create_libs_table({
+				devenv.check_lib("eslint_d", function()
+					vim.env.ESLINT_D_PPID = vim.fn.getpid()
+				end),
+				devenv.check_lib("eslint"),
+			})
 
 			lint.linters_by_ft = {
-				javascript = { eslint },
-				typescript = { eslint },
-				typescriptreact = { eslint },
-				javascriptreact = { eslint },
-				liquid = { eslint },
-				json = { eslint },
-				helm = { eslint },
-				yaml = { eslint },
-				nix = { "nix-linter" },
-				blade = { eslint },
-				php = { eslint },
+				javascript = eslint,
+				typescript = eslint,
+				typescriptreact = eslint,
+				javascriptreact = eslint,
+				json = eslint,
+				helm = eslint,
+				yaml = eslint,
 			}
 
 			-- get flat list of all possible linters from linters_by_ft
