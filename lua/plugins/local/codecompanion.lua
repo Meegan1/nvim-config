@@ -27,17 +27,6 @@ return {
 	},
 	config = function(_, config)
 		require("codecompanion").setup(vim.tbl_extend("force", {
-			adapters = {
-				copilot = function()
-					return require("codecompanion.adapters").extend("copilot", {
-						schema = {
-							model = {
-								default = "claude-3.5-sonnet",
-							},
-						},
-					})
-				end,
-			},
 			strategies = {
 				chat = {
 					adapter = "copilot",
