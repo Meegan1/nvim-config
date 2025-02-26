@@ -32,7 +32,7 @@ return {
 					return require("codecompanion.adapters").extend("copilot", {
 						schema = {
 							model = {
-								default = "claude-3.5-sonnet",
+								default = "claude-3.7-sonnet-thought",
 							},
 						},
 					})
@@ -51,6 +51,17 @@ return {
 
 					agents = {
 						adapter = "copilot",
+					},
+
+					roles = {
+						llm = function(adapter)
+							return string.format(
+								" %s%s",
+								adapter.formatted_name,
+								adapter.parameters.model and " (" .. adapter.parameters.model .. ")" or ""
+							)
+						end,
+						user = " " .. "User",
 					},
 				},
 				inline = {
