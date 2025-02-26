@@ -203,6 +203,29 @@ return {
 							})
 						end
 
+						if server_name == "twiggy_language_server" then
+							opts = vim.tbl_extend("force", opts, {
+								maxFileSize = 10000000,
+								settings = {
+									twiggy = {
+										autoInsertSpaces = true,
+										inlayHints = {
+											macro = true,
+											block = true,
+											macroArguments = true,
+										},
+										phpExecutable = "php",
+										symfonyConsolePath = "./bin/console",
+										vanillaTwigEnvironmentPath = "",
+										framework = "craft",
+										diagnostics = {
+											twigCsFixer = true,
+										},
+									},
+								},
+							})
+						end
+
 						require("lspconfig")[server_name].setup(opts)
 					end,
 				},
