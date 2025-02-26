@@ -31,6 +31,20 @@ return {
 					},
 				},
 			})
+
+			-- Remove unused imports
+			vim.keymap.set("n", "<leader>ir", function()
+				require("typescript-tools.api").remove_unused_imports(false)
+			end, {
+				desc = "Remove imports",
+			})
+
+			-- Fix all missing imports
+			vim.keymap.set("n", "<leader>if", function()
+				require("typescript-tools.api").add_missing_imports(false)
+			end, {
+				desc = "Fix imports",
+			})
 		end,
 	},
 }
