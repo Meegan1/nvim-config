@@ -34,7 +34,7 @@ return {
 				return vim.tbl_keys(unique_linters)
 			end)()
 
-			vim.api.nvim_create_autocmd({ "InsertLeave", "BufEnter", "BufWritePost" }, {
+			vim.api.nvim_create_autocmd({ "InsertLeave", "BufEnter", "BufWritePost", "TextChanged" }, {
 				callback = function()
 					-- try_lint without arguments runs the linters defined in `linters_by_ft`
 					-- for the current filetype
