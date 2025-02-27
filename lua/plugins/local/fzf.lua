@@ -1,8 +1,19 @@
+local function action_noop(_, opts)
+	local o = vim.tbl_deep_extend("keep", { resume = true }, opts.__call_opts)
+	opts.__call_fn(o)
+end
+
 return {
 	{
 		"ibhagwan/fzf-lua",
 		dependencies = { "nvim-tree/nvim-web-devicons" },
 		opts = {
+			actions = {
+				files = {
+					true,
+					["ctrl-g"] = { action_noop },
+				},
+			},
 			keymap = {
 				-- Customize key mappings in fzf window
 				build_in = {
