@@ -83,6 +83,10 @@ return {
 		end, { noremap = true, silent = true, desc = "Open the CodeCompanion inline chat" })
 
 		vim.keymap.set({ "n", "x" }, "<leader>ca", function()
+			vim.cmd("CodeCompanionActions")
+		end, { noremap = true, silent = true, desc = "Open the CodeCompanion actions menu" })
+
+		vim.keymap.set({ "n", "x" }, "<leader>cb", function()
 			local mode = vim.api.nvim_get_mode().mode
 			if mode == "v" or mode == "V" or mode == "\22" then -- "\22" is the code for <CTRL-V>
 				vim.cmd("CodeCompanionChat Add")
