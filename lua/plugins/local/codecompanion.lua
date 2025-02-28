@@ -74,6 +74,10 @@ return {
 			vim.cmd("CodeCompanionChat Toggle")
 		end, { noremap = true, silent = true, desc = "Toggle the CodeCompanion chat" })
 
+		vim.keymap.set({ "n", "x" }, "<leader>cC", function()
+			vim.cmd("CodeCompanionChat")
+		end, { noremap = true, silent = true, desc = "Create a new CodeCompanion chat" })
+
 		vim.keymap.set({ "n", "x" }, "<leader>ci", function()
 			vim.cmd("CodeCompanion")
 		end, { noremap = true, silent = true, desc = "Open the CodeCompanion inline chat" })
