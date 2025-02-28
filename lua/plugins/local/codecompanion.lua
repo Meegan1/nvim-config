@@ -26,6 +26,14 @@ return {
 		"nvim-treesitter/nvim-treesitter",
 	},
 	config = function(_, config)
+		local copilot_adapter = require("codecompanion.adapters").extend("copilot", {
+			schema = {
+				model = {
+					default = "claude-3.7-sonnet-thought",
+				},
+			},
+		})
+
 		require("codecompanion").setup(vim.tbl_extend("force", {
 			adapters = {
 				copilot = function()
@@ -85,6 +93,29 @@ return {
 		vim.keymap.set({ "n", "x" }, "<leader>ca", function()
 			vim.cmd("CodeCompanionActions")
 		end, { noremap = true, silent = true, desc = "Open the CodeCompanion actions menu" })
+
+		vim.keymap.set({ "n", "x" }, "<leader>cm", function()
+			local models = copilot_adapter.schema.model.choices(copilot_adapter)
+			local model_names = {}
+			for name, _ in pairs(models) do
+				table.insert(model_names, name)
+			end
+
+			local Chat = require("codecompanion").last_chat()
+
+			if not Chat then
+				return vim.notify("No chat found", vim.log.levels.ERROR)
+			end
+
+			vim.ui.select(model_names, {
+				prompt = "Select model:",
+			}, function(model)
+				if model then
+					Chat:apply_model(model)
+					vim.notify("Model changed to: " .. model)
+				end
+			end)
+		end, { noremap = true, silent = true, desc = "Change the model" })
 
 		vim.keymap.set({ "n", "x" }, "<leader>cb", function()
 			local mode = vim.api.nvim_get_mode().mode
