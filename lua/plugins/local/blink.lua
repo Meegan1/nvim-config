@@ -113,6 +113,7 @@ return {
 			}
 
 			-- Check if running in WSL2
+			-- see https://github.com/Saghen/blink.cmp/issues/795
 			if os.getenv("WSL_INTEROP") then
 				-- Add provider configuration to disable completion in shell command mode
 				config.sources.providers = {
