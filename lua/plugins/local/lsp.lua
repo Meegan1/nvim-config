@@ -15,12 +15,19 @@ return {
 			"nvimtools/none-ls.nvim",
 		},
 		config = function()
+			-- Define tools to potentially install
+			local tools = { "stylua", "prettierd", "dprint" }
+			local ensure_installed = {}
+
+			-- Check if each tool exists on the system before adding to ensure_installed
+			for _, tool in ipairs(tools) do
+				if vim.fn.executable(tool) ~= 1 then
+					table.insert(ensure_installed, tool)
+				end
+			end
+
 			require("mason-null-ls").setup({
-				ensure_installed = {
-					"stylua",
-					"prettierd",
-					"dprint",
-				},
+				ensure_installed = ensure_installed,
 			})
 		end,
 	},
