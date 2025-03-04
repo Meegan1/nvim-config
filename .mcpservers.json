@@ -1,0 +1,19 @@
+{
+  "mcpServers": {
+    "fetch": {
+      "disabled": false,
+      "command": "uvx",
+      "args": [
+        "mcp-server-fetch"
+      ]
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/Users/meegan1/.config/nvim"
+      ]
+    }
+  }
+}
