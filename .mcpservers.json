@@ -3,17 +3,11 @@
     "fetch": {
       "disabled": false,
       "command": "uvx",
-      "args": [
-        "mcp-server-fetch"
-      ]
+      "args": ["mcp-server-fetch"]
     },
     "filesystem": {
       "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-filesystem",
-        "/Users/meegan1/.config/nvim"
-      ]
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "."]
     }
   }
 }
