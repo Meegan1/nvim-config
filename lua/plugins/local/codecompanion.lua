@@ -63,7 +63,7 @@ return {
 							callback = require("mcphub.extensions.codecompanion"),
 							description = "Call tools and resources from the MCP Servers",
 							opts = {
-								required_approval = true,
+								requires_approval = true,
 							},
 						},
 					},
