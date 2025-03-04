@@ -24,6 +24,7 @@ return {
 	dependencies = {
 		"nvim-lua/plenary.nvim",
 		"nvim-treesitter/nvim-treesitter",
+		"ravitemer/mcphub.nvim",
 	},
 	config = function(_, config)
 		local copilot_adapter = require("codecompanion.adapters").extend("copilot", {
@@ -59,6 +60,15 @@ return {
 
 					agents = {
 						adapter = "copilot",
+						tools = {
+							["mcp"] = {
+								callback = require("mcphub.extensions.codecompanion"),
+								description = "Call tools and resources from the MCP Servers",
+								opts = {
+									user_approval = true,
+								},
+							},
+						},
 					},
 
 					roles = {
