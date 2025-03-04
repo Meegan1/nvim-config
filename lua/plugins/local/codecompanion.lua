@@ -58,17 +58,18 @@ return {
 						},
 					},
 
-					agents = {
-						adapter = "copilot",
-						tools = {
-							["mcp"] = {
-								callback = require("mcphub.extensions.codecompanion"),
-								description = "Call tools and resources from the MCP Servers",
-								opts = {
-									user_approval = true,
-								},
+					tools = {
+						["mcp"] = {
+							callback = require("mcphub.extensions.codecompanion"),
+							description = "Call tools and resources from the MCP Servers",
+							opts = {
+								required_approval = true,
 							},
 						},
+					},
+
+					agents = {
+						adapter = "copilot",
 					},
 
 					roles = {

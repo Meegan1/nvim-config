@@ -104,7 +104,7 @@ return {
 					config = config_path,
 					shutdown_delay = 0,
 					log = {
-						level = vim.log.levels.WARN,
+						level = vim.log.levels.ERROR,
 						to_file = false,
 						file_path = nil,
 						prefix = "MCPHub",
