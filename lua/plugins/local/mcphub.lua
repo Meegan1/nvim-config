@@ -10,12 +10,10 @@ return {
 			local mcphub = require("mcphub")
 			local Path = require("plenary.path")
 
-			-- Get current working directory
-			local cwd = vim.fn.getcwd()
-
 			-- Constants and default configuration
 			local CONFIG_FILENAME = ".mcpservers.json"
-			local DEFAULT_PORT = 4250
+			local PORT_RANGE_START = 1024
+			local PORT_RANGE_END = 65535
 			local DEFAULT_CONFIG = {
 				mcpServers = {
 					fetch = {
@@ -37,7 +35,7 @@ return {
 						args = {
 							"-y",
 							"@modelcontextprotocol/server-filesystem",
-							cwd,
+							".",
 						},
 					},
 				},
@@ -97,10 +95,23 @@ return {
 				return true
 			end
 
+			-- Hash the current working directory to generate a unique port
+			local function hash_string(str)
+				local hash = 5381
+				for i = 1, #str do
+					hash = ((hash * 33) + string.byte(str, i)) % (2 ^ 32)
+				end
+				return hash
+			end
+
 			-- Start MCP Hub with the specified config path
 			utils.start_mcp = function(config_path)
+				local cwd = vim.fn.getcwd()
+				local hashed_cwd = hash_string(cwd)
+				local port = PORT_RANGE_START + (hashed_cwd % (PORT_RANGE_END - PORT_RANGE_START + 1))
+
 				mcphub.setup({
-					port = DEFAULT_PORT,
+					port = port,
 					config = config_path,
 					shutdown_delay = 0,
 					log = {
@@ -110,7 +121,7 @@ return {
 						prefix = "MCPHub",
 					},
 				})
-				vim.notify("MCP Hub started with config: " .. config_path, vim.log.levels.INFO)
+				vim.notify("MCP Hub started on port " .. port .. " with config: " .. config_path, vim.log.levels.INFO)
 				return true
 			end
 
