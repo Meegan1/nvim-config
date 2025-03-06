@@ -5,8 +5,35 @@ return {
 			"nvim-lua/plenary.nvim", -- Required for Job and HTTP requests
 			"ibhagwan/fzf-lua", -- For config file selection
 		},
-		build = "npm add -g mcp-hub@latest", -- Installs required mcp-hub npm module
 		config = function()
+			local function ensure_mcp_hub_installed()
+				-- Check if mcp-hub is already installed
+				local is_installed = vim.fn.system("command -v mcp-hub") ~= ""
+
+				if not is_installed then
+					vim.notify("Installing mcp-hub...", vim.log.levels.INFO)
+
+					-- Check if bun is available
+					local has_bun = vim.fn.system("command -v bun") ~= ""
+					local install_cmd
+
+					if has_bun then
+						install_cmd = "bun install -g mcp-hub@latest"
+					else
+						install_cmd = "npm install -g mcp-hub@latest"
+					end
+
+					local install_result = vim.fn.system(install_cmd)
+					if vim.v.shell_error ~= 0 then
+						vim.notify("Failed to install mcp-hub: " .. install_result, vim.log.levels.ERROR)
+					else
+						vim.notify("mcp-hub installed successfully", vim.log.levels.INFO)
+					end
+				end
+			end
+
+			ensure_mcp_hub_installed()
+
 			local mcphub = require("mcphub")
 			local Path = require("plenary.path")
 
