@@ -31,5 +31,5 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 })
 
 -- Copy and paste to system clipboard
-vim.api.nvim_set_keymap("v", "<leader>y", '"+y', { desc = "Yank to clipboard" })
-vim.api.nvim_set_keymap("n", "<leader>p", '"+p', { desc = "Paste from clipboard" })
+vim.keymap.set({ "n", "x" }, "<leader>y", '"+y', { desc = "Yank to clipboard" })
+vim.keymap.set({ "n", "x" }, "<leader>p", '"+p', { desc = "Paste from clipboard" })
