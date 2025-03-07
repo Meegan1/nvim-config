@@ -29,3 +29,7 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 		pcall(vim.highlight.on_yank, { higroup = "YankHighlight", timeout = 200 })
 	end,
 })
+
+-- Copy and paste to system clipboard
+vim.api.nvim_set_keymap("v", "<leader>y", '"+y', { desc = "Yank to clipboard" })
+vim.api.nvim_set_keymap("n", "<leader>p", '"+p', { desc = "Paste from clipboard" })
