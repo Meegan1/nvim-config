@@ -1,38 +1,54 @@
+local get_sidebar = function()
+	return require("overseer.task_list.sidebar").get_or_create()
+end
+
+local jump_task = function(num)
+	local sidebar = get_sidebar()
+	local focused_task = sidebar.focused_task_id
+	local task_lines = sidebar.task_lines
+
+	-- loop over the task lines to find the focused task
+	for i, line in ipairs(task_lines) do
+		if line[2].id == focused_task then
+			local target_index
+
+			-- calculate target index with wrap-around
+			if i + num > #task_lines then
+				target_index = 1
+			elseif i + num < 1 then
+				target_index = #task_lines
+			else
+				target_index = i + num
+			end
+
+			sidebar:focus_task_id(task_lines[target_index][2].id)
+			break
+		end
+	end
+end
+
 return {
 	{
 		"stevearc/overseer.nvim",
-		opts = {},
+		opts = {
+			task_list = {
+				bindings = {
+					["x"] = function()
+						local sidebar = get_sidebar()
+
+						-- Ask for confirmation before disposing the task
+						local confirm = vim.fn.confirm("Dispose task?", "Yes\nNo", 2)
+						if confirm == 1 then
+							sidebar:run_action("dispose")
+
+							vim.notify("Task disposed", "info")
+						end
+					end,
+				},
+			},
+		},
 		config = function(_, opts)
 			require("overseer").setup(opts)
-
-			local get_sidebar = function()
-				return require("overseer.task_list.sidebar").get_or_create()
-			end
-
-			local jump_task = function(num)
-				local sidebar = get_sidebar()
-				local focused_task = sidebar.focused_task_id
-				local task_lines = sidebar.task_lines
-
-				-- loop over the task lines to find the focused task
-				for i, line in ipairs(task_lines) do
-					if line[2].id == focused_task then
-						local target_index
-
-						-- calculate target index with wrap-around
-						if i + num > #task_lines then
-							target_index = 1
-						elseif i + num < 1 then
-							target_index = #task_lines
-						else
-							target_index = i + num
-						end
-
-						sidebar:focus_task_id(task_lines[target_index][2].id)
-						break
-					end
-				end
-			end
 
 			-- Add keymap <leader>oo to toggle the overseer window
 			vim.keymap.set("n", "<leader>oo", function()
