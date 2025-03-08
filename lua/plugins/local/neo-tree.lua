@@ -32,6 +32,41 @@ return {
 					["ot"] = "noop",
 					["s"] = "noop",
 					["S"] = "open_vsplit",
+					["O"] = {
+						function(state)
+							local node = state.tree:get_node()
+							local path = node.path
+							local cmd
+
+							-- Check if we're in a Docker container
+							local in_container = (vim.fn.filereadable("/.dockerenv") == 1)
+							if in_container then
+								vim.notify(
+									"Cannot open file with system application while inside a Docker container.",
+									vim.log.levels.ERROR
+								)
+								return
+							end
+
+							-- Determine OS and use appropriate open command
+							if vim.fn.has("mac") == 1 then
+								cmd = "open"
+							elseif vim.fn.has("unix") == 1 then
+								cmd = "xdg-open"
+							elseif vim.fn.has("win32") == 1 then
+								cmd = 'start ""'
+							end
+
+							if cmd then
+								vim.fn.jobstart(cmd .. ' "' .. path .. '"', { detach = true })
+								vim.notify("Opening " .. path .. " with system application")
+							else
+								vim.notify("Error: Unsupported operating system", vim.log.levels.ERROR)
+							end
+						end,
+						desc = "Open with system application",
+						nowait = true,
+					},
 					["T"] = {
 						function(state)
 							local node = state.tree:get_node()
