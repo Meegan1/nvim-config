@@ -9,7 +9,7 @@
   "codecompanion.nvim": { "branch": "main", "commit": "e4cb3a9af65dbc10938054c6f6f94c6d4d2d1d86" },
   "conform.nvim": { "branch": "master", "commit": "a6f5bdb78caa305496357d17e962bbc4c0b392e2" },
   "copilot-lualine": { "branch": "main", "commit": "dc4b8ed0f75bc2557b3158c526624bf04ad233ea" },
-  "copilot.lua": { "branch": "master", "commit": "30321e33b03cb924fdcd6a806a0dc6fa0b0eafb9" },
+  "copilot.lua": { "branch": "create-pull-request/update-copilot-dist", "commit": "825b6a9574584c5f90a4abcdf04ebb98f2c1260a" },
   "diffview.nvim": { "branch": "main", "commit": "4516612fe98ff56ae0415a259ff6361a89419b0a" },
   "dropbar.nvim": { "branch": "master", "commit": "807ddc72457907a4d7e385cec0aa25648ee60a58" },
   "edgy.nvim": { "branch": "main", "commit": "7e8dedc39abebe40c289b8012cc89b11c69aa7a0" },
