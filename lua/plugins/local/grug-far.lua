@@ -15,10 +15,16 @@ return {
 				"<leader>ff",
 				function()
 					local grug = require("grug-far")
-					grug.open({
-						transient = true,
-						instanceName = "default",
-					})
+					local is_open = grug.is_instance_open("default")
+
+					if is_open then
+						grug.close_instance("default")
+					else
+						grug.open({
+							transient = true,
+							instanceName = "default",
+						})
+					end
 				end,
 				mode = { "n", "v" },
 				desc = "Search and Replace",
