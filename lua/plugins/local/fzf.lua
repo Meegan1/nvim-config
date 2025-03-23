@@ -8,12 +8,6 @@ return {
 		"ibhagwan/fzf-lua",
 		dependencies = { "nvim-tree/nvim-web-devicons" },
 		opts = {
-			actions = {
-				files = {
-					true,
-					["ctrl-g"] = { action_noop },
-				},
-			},
 			keymap = {
 				-- Customize key mappings in fzf window
 				build_in = {
