@@ -39,7 +39,7 @@ return {
 				},
 			})
 
-			vim.keymap.set("n", "<leader>ds", function()
+			vim.keymap.set("n", "<leader>dp", function()
 				api.pick()
 			end, { noremap = true, silent = true, desc = "Pick dropbar" })
 		end,

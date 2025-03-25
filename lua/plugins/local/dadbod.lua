@@ -29,7 +29,7 @@ return {
 		init = function()
 			-- Your DBUI configuration
 			vim.g.db_ui_use_nerd_fonts = 1
-			vim.keymap.set("n", "<leader>db", function()
+			vim.keymap.set("n", "<leader>D", function()
 				vim.cmd("DBUIToggle")
 			end, { noremap = true, silent = true, desc = "Toggle DBUI" })
 		end,

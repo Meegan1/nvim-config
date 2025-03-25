@@ -7,6 +7,8 @@ return {
 			require("catppuccin").setup({
 				integrations = {
 					blink_cmp = true,
+					dap = true,
+					dap_ui = true,
 					mason = true,
 					gitsigns = true,
 					treesitter = true,
