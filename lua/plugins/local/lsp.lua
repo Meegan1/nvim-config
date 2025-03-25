@@ -109,6 +109,7 @@ return {
 				"jsonls",
 				"shopify_theme_ls",
 				"twiggy_language_server",
+				"astro",
 			}
 
 			-- Setup nixd for nix files if nixd is installed

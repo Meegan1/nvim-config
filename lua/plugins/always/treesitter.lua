@@ -29,6 +29,7 @@ return {
 				"nix",
 				"blade",
 				"twig",
+				"astro",
 			},
 		},
 		---@param opts TSConfig
