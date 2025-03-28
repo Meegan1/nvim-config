@@ -110,6 +110,7 @@ return {
 				"shopify_theme_ls",
 				"twiggy_language_server",
 				"astro",
+				"ast_grep",
 			}
 
 			-- Setup nixd for nix files if nixd is installed
@@ -231,6 +232,14 @@ return {
 										},
 									},
 								},
+							})
+						end
+
+						if server_name == "ast_grep" then
+							opts = vim.tbl_extend("force", opts, {
+								cmd = { "ast-grep", "lsp" },
+								single_file_support = false,
+								root_dir = require("lspconfig/util").root_pattern("sgconfig.yml"),
 							})
 						end
 

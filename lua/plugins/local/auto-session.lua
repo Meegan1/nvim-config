@@ -8,14 +8,28 @@ return {
 		config = function()
 			local console_log = require("console_log")
 
+			local has_neo_tree = pcall(require, "neo-tree")
+
 			local close_neo_tree = function()
+				if has_neo_tree then
+					return
+				end
+
 				require("neo-tree.sources.manager").close_all()
 				console_log.log("Closed all NeoTree windows", vim.log.levels.DEBUG, { title = "AutoSession" })
 			end
 
 			local open_neo_tree = function()
+				if not has_neo_tree then
+					return
+				end
+
 				console_log.log("Opening NeoTree window", vim.log.levels.DEBUG, { title = "AutoSession" })
 				require("neo-tree.sources.manager").show("filesystem")
+			end
+
+			local load_oil = function()
+				require("oil")
 			end
 
 			-- If no directory is provided, don't auto restore the session
@@ -82,6 +96,7 @@ return {
 				},
 
 				pre_restore_cmds = {
+					load_oil,
 					-- Get rid of all previous tasks when restoring a session
 					function()
 						for _, task in ipairs(overseer.list_tasks({})) do
@@ -96,6 +111,10 @@ return {
 						overseer.load_task_bundle(get_cwd_as_name(), { ignore_missing = true })
 					end,
 					"stopinsert", -- Stop insert mode after restoring session
+				},
+
+				no_restore_cmds = {
+					load_oil,
 				},
 
 				session_lens = {

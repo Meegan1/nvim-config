@@ -82,46 +82,131 @@ return {
 			config.defaults.keymap.builtin["<c-f>"] = "preview-page-down"
 			config.defaults.keymap.builtin["<c-b>"] = "preview-page-up"
 
-			-- Files with hidden files and ignore .git
-			vim.keymap.set({ "n", "i", "v" }, "<C-p>", function()
-				require("fzf-lua").files({
+			local find_files = function()
+				return fzf.files({
 					hidden = true,
 					fd_opts = "--type f --hidden --exclude .git",
 				})
-			end)
+			end
 
-			-- Commands
-			vim.keymap.set({ "n", "i", "v" }, "<C-S-P>", function()
-				require("fzf-lua").commands()
-			end)
+			local find_commands = function()
+				return fzf.commands()
+			end
 
-			-- Search in current file
-			vim.keymap.set("n", "<C-f>", function()
-				require("fzf-lua").blines()
-			end)
+			local find_buffers = function()
+				return fzf.buffers()
+			end
 
-			-- Live grep with hidden files
-			vim.keymap.set("n", "<C-S-F>", function()
-				require("fzf-lua").live_grep({
+			local find_blines = function()
+				return fzf.blines()
+			end
+
+			local find_live_grep = function()
+				return fzf.live_grep({
 					hidden = true,
 					no_ignore = true,
 					rg_opts = "-g '!**/{dist,vendor,node_modules,coverage,.next,.nx,storage/runtime,storage/logs,storage/backups,storage/composer-backups}/**'",
 				})
-			end)
+			end
+
+			local find_lsp_workspace_symbols = function()
+				return fzf.lsp_workspace_symbols()
+			end
+
+			local find_undo = function()
+				return require("modules.fzf.undo").undo()
+			end
+
+			local find_lsp_code_actions = function()
+				return fzf.lsp_code_actions()
+			end
+
+			-- Files with hidden files and ignore .git
+			vim.keymap.set({ "n", "i", "v" }, "<C-p>", function()
+				find_files()
+			end, {
+				desc = "fzf-lua: files",
+			})
+			vim.keymap.set({ "n" }, "<leader>fd", function()
+				find_files()
+			end, {
+				desc = "fzf-lua: files",
+			})
+
+			-- Commands
+			vim.keymap.set({ "n", "i", "v" }, "<C-S-P>", function()
+				find_commands()
+			end, {
+				desc = "fzf-lua: commands",
+			})
+			vim.keymap.set({ "n" }, "<leader>fc", function()
+				find_commands()
+			end, {
+				desc = "fzf-lua: commands",
+			})
+
+			-- Buffers
+			vim.keymap.set({ "n" }, "<leader>fb", function()
+				find_buffers()
+			end, {
+				desc = "fzf-lua: buffers",
+			})
+
+			-- Blines
+			-- Search in current file
+			vim.keymap.set("n", "<C-f>", function()
+				find_blines()
+			end, {
+				desc = "fzf-lua: blines",
+			})
+			vim.keymap.set("n", "<leader>fi", function()
+				find_blines()
+			end, {
+				desc = "fzf-lua: blines",
+			})
+
+			-- Live grep with hidden files
+			vim.keymap.set("n", "<C-S-F>", function()
+				find_live_grep()
+			end, {
+				desc = "fzf-lua: live grep",
+			})
+			vim.keymap.set("n", "<leader>fg", function()
+				find_live_grep()
+			end, {
+				desc = "fzf-lua: live grep",
+			})
 
 			-- LSP workspace symbols
 			vim.keymap.set("n", "<C-t>", function()
-				require("fzf-lua").lsp_workspace_symbols()
-			end)
+				find_lsp_workspace_symbols()
+			end, {
+				desc = "fzf-lua: lsp workspace symbols",
+			})
+			vim.keymap.set("n", "<leader>fs", function()
+				find_lsp_workspace_symbols()
+			end, {
+				desc = "fzf-lua: lsp workspace symbols",
+			})
 
 			-- Undo history (built into fzf-lua)
 			vim.keymap.set("n", "<leader>u", function()
-				require("modules.fzf.undo").undo()
-			end, { desc = "undo history" })
+				find_undo()
+			end, {
+				desc = "fzf-lua: undo history",
+			})
+			vim.keymap.set("n", "<leader>fu", function()
+				find_undo()
+			end, {
+				desc = "fzf-lua: undo history",
+			})
 
+			-- FZF-Lua LSP code actions
 			vim.keymap.set({ "n", "i", "v" }, "<C-.>", function()
-				vim.lsp.buf.code_action()
-			end)
+				find_lsp_code_actions()
+			end, {
+				desc = "fzf-lua: lsp code actions",
+			})
 		end,
 	},
 }
