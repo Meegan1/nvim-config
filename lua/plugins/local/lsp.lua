@@ -130,11 +130,7 @@ return {
 					-- this first function is the "default handler"
 					-- it applies to every language server without a "custom handler"
 					function(server_name)
-						local capabilities = vim.lsp.protocol.make_client_capabilities()
-						capabilities.textDocument.foldingRange = {
-							dynamicRegistration = false,
-							lineFoldingOnly = true,
-						}
+						local capabilities = require("blink.cmp").get_lsp_capabilities()
 
 						local opts = {
 							capabilities = capabilities,
