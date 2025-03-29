@@ -1,8 +1,3 @@
-local function action_noop(_, opts)
-	local o = vim.tbl_deep_extend("keep", { resume = true }, opts.__call_opts)
-	opts.__call_fn(o)
-end
-
 return {
 	{
 		"ibhagwan/fzf-lua",
@@ -206,6 +201,13 @@ return {
 				find_lsp_code_actions()
 			end, {
 				desc = "fzf-lua: lsp code actions",
+			})
+
+			-- Add keybinding for snippets
+			vim.keymap.set("n", "<leader>fs", function()
+				require("modules.fzf.snippets").find_snippets()
+			end, {
+				desc = "fzf-lua: luasnip snippets",
 			})
 		end,
 	},
