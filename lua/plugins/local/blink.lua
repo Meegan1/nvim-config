@@ -1,8 +1,9 @@
 return {
 	{
 		"saghen/blink.cmp",
-		-- optional: provides snippets for the snippet source
-		dependencies = "rafamadriz/friendly-snippets",
+		dependencies = {
+			{ "L3MON4D3/LuaSnip", version = "v2.x" },
+		},
 
 		-- use a release tag to download pre-built binaries
 		version = "*",
@@ -11,10 +12,14 @@ return {
 		-- If you use nix, you can build from source using latest nightly rust with:
 		-- build = 'nix run .#build-plugin',
 
-		---@module 'blink.cmp'
-		---@type blink.cmp.Config
 		opts = function()
+			---@module 'blink.cmp'
+			---@type blink.cmp.Config
 			local config = {
+				snippets = {
+					preset = "luasnip",
+				},
+
 				appearance = {
 					-- Sets the fallback highlight groups to nvim-cmp's highlight groups
 					-- Useful for when your theme doesn't support blink.cmp
@@ -28,7 +33,7 @@ return {
 				-- Default list of enabled providers defined so that you can extend it
 				-- elsewhere in your config, without redefining it, due to `opts_extend`
 				sources = {
-					default = { "lsp", "dadbod", "path", "buffer", "codecompanion" },
+					default = { "lsp", "dadbod", "path", "buffer", "codecompanion", "snippets" },
 				},
 
 				completion = {
