@@ -4,11 +4,7 @@ return {
 		requires = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
 		opts = {},
 		config = function()
-			local capabilities = vim.lsp.protocol.make_client_capabilities()
-			capabilities.textDocument.foldingRange = {
-				dynamicRegistration = false,
-				lineFoldingOnly = true,
-			}
+			local capabilities = require("blink.cmp").get_lsp_capabilities()
 
 			require("typescript-tools").setup({
 				capabilities = capabilities,
