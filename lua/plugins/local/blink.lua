@@ -88,7 +88,6 @@ return {
 								return true
 							end
 						end,
-						"snippet_forward",
 						"fallback",
 					},
 
@@ -100,7 +99,6 @@ return {
 								return true
 							end
 						end,
-						"snippet_backward",
 						"fallback",
 					},
 					["<S-Tab>"] = {
@@ -111,7 +109,6 @@ return {
 								return true
 							end
 						end,
-						"snippet_backward",
 						"fallback",
 					},
 				},
