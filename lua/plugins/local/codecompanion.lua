@@ -66,6 +66,10 @@ return {
 								requires_approval = true,
 							},
 						},
+						["vectorcode"] = {
+							description = "Run VectorCode to retrieve the project context.",
+							callback = require("vectorcode.integrations").codecompanion.chat.make_tool(),
+						},
 					},
 
 					agents = {
