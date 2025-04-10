@@ -39,6 +39,8 @@ return {
 					nix = { "nixfmt", stop_after_first = true },
 					blade = prettier,
 					php = prettier,
+					astro = prettier,
+					mdx = prettier,
 				},
 				-- Set up format-on-save
 				format_on_save = function(bufnr)

@@ -111,6 +111,7 @@ return {
 				"twiggy_language_server",
 				"astro",
 				"ast_grep",
+				"mdx_analyzer",
 			}
 
 			-- Setup nixd for nix files if nixd is installed
@@ -236,6 +237,16 @@ return {
 								cmd = { "ast-grep", "lsp" },
 								single_file_support = false,
 								root_dir = require("lspconfig/util").root_pattern("sgconfig.yml"),
+							})
+						end
+
+						if server_name == "mdx_analyzer" then
+							opts = vim.tbl_extend("force", opts, {
+								init_options = {
+									typescript = {
+										enabled = true,
+									},
+								},
 							})
 						end
 
