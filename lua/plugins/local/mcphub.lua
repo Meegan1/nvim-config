@@ -50,13 +50,6 @@ return {
 							"mcp-server-fetch",
 						},
 					},
-					-- ["llm-txt"] = {
-					-- 	command = "npx",
-					-- 	args = {
-					-- 		"-y",
-					-- 		"@mcp-get-community/server-llm-txt",
-					-- 	},
-					-- },
 					["filesystem"] = {
 						command = "npx",
 						args = {
