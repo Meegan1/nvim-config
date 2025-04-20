@@ -4,63 +4,125 @@ return {
 		version = "*", -- optional, depending on whether you're on nightly or release
 		dependencies = { "nvim-lua/plenary.nvim" },
 		config = function(_, opts)
-			local function ensure_vectorcode_installed()
-				-- Check if mcp-hub is already installed
-				local is_installed = vim.fn.system("command -v vectorcode") ~= ""
+			local Job = require("plenary.job")
+			local async = require("plenary.async")
+			local path = require("plenary.path")
 
+			local function async_ensure_vectorcode_installed(callback)
 				-- Check if uv is available
-				local has_uv = vim.fn.system("command -v uv") ~= ""
-				if not has_uv then
-					vim.notify("uv is not installed, skipping install. Please install uv first.", vim.log.levels.INFO)
-					return false
-				end
+				Job:new({
+					command = "sh",
+					args = { "-c", "command -v uv" },
+					on_exit = function(_, return_val)
+						local has_uv = return_val == 0
+						if not has_uv then
+							vim.schedule(function()
+								vim.notify(
+									"uv is not installed, skipping install. Please install uv first.",
+									vim.log.levels.INFO
+								)
+							end)
+							callback(false)
+							return
+						end
 
-				if not is_installed then
-					vim.notify("Installing VectorCode...", vim.log.levels.INFO)
-				else
-					vim.notify("Updating VectorCode...", vim.log.levels.INFO)
-				end
+						-- Check if vectorcode is installed
+						Job:new({
+							command = "sh",
+							args = { "-c", "command -v vectorcode" },
+							on_exit = function(_, return_val)
+								local is_installed = return_val == 0
 
-				local install_cmd = "uv tool install --upgrade vectorcode"
-				local install_result = vim.fn.system(install_cmd)
+								vim.schedule(function()
+									if not is_installed then
+										vim.notify("Installing VectorCode...", vim.log.levels.INFO)
+									else
+										vim.notify("Updating VectorCode...", vim.log.levels.INFO)
+									end
+								end)
 
-				if vim.v.shell_error ~= 0 then
-					vim.notify("Failed to install VectorCode: " .. install_result, vim.log.levels.ERROR)
-					return false
-				else
-					vim.notify("VectorCode installed successfully", vim.log.levels.INFO)
-					return true
-				end
+								-- Install or update vectorcode
+								Job
+									:new({
+										command = "uv",
+										args = { "tool", "install", "--upgrade", "vectorcode" },
+										on_exit = function(_, return_val)
+											if return_val ~= 0 then
+												vim.schedule(function()
+													vim.notify("Failed to install VectorCode", vim.log.levels.ERROR)
+												end)
+												callback(false)
+											else
+												vim.schedule(function()
+													vim.notify("VectorCode installed successfully", vim.log.levels.INFO)
+												end)
+												callback(true)
+											end
+										end,
+									})
+									:start()
+							end,
+						}):start()
+					end,
+				}):start()
 			end
 
-			local function check_chroma_server()
-				local curl_cmd = 'curl -s -o /dev/null -w "%{http_code}" http://localhost:8000/api/v1/heartbeat'
-				local status_code = tonumber(vim.fn.system(curl_cmd))
+			local function async_check_chroma_server(callback)
+				-- Try localhost first
+				Job:new({
+					command = "curl",
+					args = { "-s", "-o", "/dev/null", "-w", "%{http_code}", "http://localhost:8000/api/v1/heartbeat" },
+					on_exit = function(j, _)
+						local output = j:result()[1]
+						local status_code = tonumber(output)
 
-				if status_code and status_code >= 200 and status_code < 300 then
-					vim.notify("Chroma DB server found on localhost:8000", vim.log.levels.INFO)
-					return "localhost", "8000"
-				end
+						if status_code and status_code >= 200 and status_code < 300 then
+							vim.schedule(function()
+								vim.notify("Chroma DB server found on localhost:8000", vim.log.levels.INFO)
+							end)
+							callback("localhost", "8000")
+							return
+						end
 
-				-- Try Docker host if localhost failed
-				curl_cmd = 'curl -s -o /dev/null -w "%{http_code}" http://host.docker.internal:8000/api/v1/heartbeat'
-				status_code = tonumber(vim.fn.system(curl_cmd))
+						-- Try Docker host if localhost failed
+						Job:new({
+							command = "curl",
+							args = {
+								"-s",
+								"-o",
+								"/dev/null",
+								"-w",
+								"%{http_code}",
+								"http://host.docker.internal:8000/api/v1/heartbeat",
+							},
+							on_exit = function(j, _)
+								local output2 = j:result()[1]
+								local status_code2 = tonumber(output2)
 
-				if status_code and status_code >= 200 and status_code < 300 then
-					vim.notify("Chroma DB server found on host.docker.internal:8000", vim.log.levels.INFO)
-					return "host.docker.internal", "8000"
-				end
-
-				vim.notify("No Chroma DB server found", vim.log.levels.WARN)
-				return nil, nil
+								if status_code2 and status_code2 >= 200 and status_code2 < 300 then
+									vim.schedule(function()
+										vim.notify(
+											"Chroma DB server found on host.docker.internal:8000",
+											vim.log.levels.INFO
+										)
+									end)
+									callback("host.docker.internal", "8000")
+								else
+									vim.schedule(function()
+										vim.notify("No Chroma DB server found", vim.log.levels.WARN)
+									end)
+									callback(nil, nil)
+								end
+							end,
+						}):start()
+					end,
+				}):start()
 			end
 
 			local function update_config_file(host, port)
 				if not (host and port) then
 					return
 				end
-
-				local path = require("plenary.path")
 
 				-- Use current working directory
 				local cwd = vim.fn.getcwd()
@@ -101,20 +163,32 @@ return {
 				end
 			end
 
-			local is_installed = ensure_vectorcode_installed()
+			-- Start async initialization
+			async.run(function()
+				-- Initialize the plugin immediately with default settings
+				async.util.scheduler()
+				local vectorcode = require("vectorcode")
+				vectorcode.setup(opts)
 
-			if not is_installed then
-				return
-			end
-
-			-- Check for Chroma server and update config file if found
-			local host, port = check_chroma_server()
-			if host and port then
-				update_config_file(host, port)
-			end
-
-			local vectorcode = require("vectorcode")
-			vectorcode.setup(opts)
+				-- Run async tasks in the background
+				async_ensure_vectorcode_installed(function(is_installed)
+					if is_installed then
+						async_check_chroma_server(function(host, port)
+							if host and port then
+								vim.schedule(function()
+									update_config_file(host, port)
+								end)
+							end
+						end)
+					end
+				end)
+			end, function(err)
+				if err then
+					vim.schedule(function()
+						vim.notify("Error in VectorCode initialization: " .. tostring(err), vim.log.levels.ERROR)
+					end)
+				end
+			end)
 		end,
 	},
 }
