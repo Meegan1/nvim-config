@@ -28,6 +28,7 @@ return {
 					enabled = false,
 				},
 			},
+			image = {},
 		},
 		config = function(_, config)
 			require("snacks").setup(config)
