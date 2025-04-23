@@ -100,7 +100,7 @@ return {
 				return fzf.live_grep({
 					hidden = true,
 					no_ignore = true,
-					rg_opts = "-g '!**/{dist,vendor,node_modules,coverage,.next,.nx,storage/runtime,storage/logs,storage/backups,storage/composer-backups}/**'",
+					rg_opts = "-g '!**/{.git,dist,vendor,node_modules,coverage,.next,.nx,storage/runtime,storage/logs,storage/backups,storage/composer-backups}/**'",
 				})
 			end
 
