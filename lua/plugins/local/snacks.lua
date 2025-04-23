@@ -90,7 +90,6 @@ return {
 				height = 20,
 			}
 			local toggle_terminal = function()
-				vim.notify(vim.inspect(terminal_context), { title = "Terminal Context" })
 				local terminal, created = require("snacks").terminal.get(nil, {
 					auto_close = true,
 					auto_insert = false,
