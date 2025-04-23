@@ -29,6 +29,8 @@ return {
 				},
 			},
 			image = {},
+
+			terminal = {},
 		},
 		config = function(_, config)
 			require("snacks").setup(config)
@@ -82,6 +84,78 @@ return {
 			vim.keymap.set({ "n", "v" }, "<leader><leader>dd", function()
 				vim.cmd("BufferDeleteOther")
 			end, { noremap = true, desc = "Delete all buffers except the current one" })
+
+			local terminal_context = {
+				mode = "n", ---- default terminal mode
+				height = 20,
+			}
+			local toggle_terminal = function()
+				vim.notify(vim.inspect(terminal_context), { title = "Terminal Context" })
+				local terminal, created = require("snacks").terminal.get(nil, {
+					auto_close = true,
+					auto_insert = false,
+					start_insert = terminal_context.mode == "i" or terminal_context.mode == "t",
+
+					win = {
+						style = "minimal",
+						height = terminal_context.height,
+						position = "bottom",
+						enter = false,
+					},
+				})
+
+				-- Throw an error if the terminal is not created
+				if not terminal then
+					require("snacks").notifier.notify("Terminal not created", "error")
+					return
+				end
+
+				if created then
+					terminal:on("BufEnter", function()
+						-- We could also force the mode here if needed
+						if terminal_context.mode == "i" or terminal_context.mode == "t" then
+							vim.cmd("startinsert")
+						else
+							vim.cmd("stopinsert")
+						end
+					end)
+
+					vim.api.nvim_create_autocmd("ModeChanged", {
+						buffer = terminal.buf,
+						callback = function()
+							-- store the current terminal mode when switching
+							terminal_context.mode = vim.v.event.new_mode
+						end,
+					})
+
+					-- Track window height on WinClosed
+					vim.api.nvim_create_autocmd("WinClosed", {
+						buffer = terminal.buf,
+						callback = function()
+							local win = vim.fn.bufwinid(terminal.buf)
+							if win ~= -1 then
+								terminal_context.height = vim.api.nvim_win_get_height(win)
+							end
+						end,
+					})
+
+					terminal:focus()
+				else
+					if terminal:valid() then
+						terminal:hide()
+					else
+						terminal:show()
+						vim.api.nvim_win_set_height(terminal.win, terminal_context.height)
+						terminal:focus()
+					end
+				end
+
+				return terminal
+			end
+
+			vim.keymap.set({ "n", "i", "v", "t" }, "<C-j>", function()
+				toggle_terminal()
+			end, { noremap = true, silent = true })
 		end,
 	},
 }
