@@ -28,7 +28,12 @@ return {
 					enabled = false,
 				},
 			},
-			image = {},
+
+			image = {
+				doc = {
+					enabled = false,
+				},
+			},
 
 			terminal = {},
 		},
