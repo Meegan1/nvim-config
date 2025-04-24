@@ -115,14 +115,17 @@ return {
 				end
 
 				if created then
-					terminal:on("BufEnter", function()
-						-- We could also force the mode here if needed
-						if terminal_context.mode == "i" or terminal_context.mode == "t" then
-							vim.cmd("startinsert")
-						else
-							vim.cmd("stopinsert")
-						end
-					end)
+					vim.api.nvim_create_autocmd("BufEnter", {
+						buffer = terminal.buf,
+						callback = function()
+							-- We could also force the mode here if needed
+							if terminal_context.mode == "i" or terminal_context.mode == "t" then
+								vim.cmd("startinsert")
+							else
+								vim.cmd("stopinsert")
+							end
+						end,
+					})
 
 					vim.api.nvim_create_autocmd("ModeChanged", {
 						buffer = terminal.buf,
