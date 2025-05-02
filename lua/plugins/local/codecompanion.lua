@@ -58,20 +58,6 @@ return {
 						},
 					},
 
-					tools = {
-						["mcp"] = {
-							callback = require("mcphub.extensions.codecompanion"),
-							description = "Call tools and resources from the MCP Servers",
-							opts = {
-								requires_approval = true,
-							},
-						},
-						["vectorcode"] = {
-							description = "Run VectorCode to retrieve the project context.",
-							callback = require("vectorcode.integrations").codecompanion.chat.make_tool(),
-						},
-					},
-
 					agents = {
 						adapter = "copilot",
 					},
@@ -89,6 +75,23 @@ return {
 				},
 				inline = {
 					adapter = "copilot",
+				},
+			},
+			extensions = {
+				mcphub = {
+					callback = "mcphub.extensions.codecompanion",
+					opts = {
+						make_vars = true,
+						make_slash_commands = true,
+						show_results_in_chat = true,
+					},
+				},
+				vectorcode = {
+					opts = {
+						add_tool = true,
+						add_slash_command = true,
+						tool_opts = {},
+					},
 				},
 			},
 		}, config))
