@@ -30,7 +30,7 @@ return {
 		local copilot_adapter = require("codecompanion.adapters").extend("copilot", {
 			schema = {
 				model = {
-					default = "gpt-4o",
+					default = "gpt-4.1",
 				},
 			},
 		})
@@ -41,7 +41,7 @@ return {
 					return require("codecompanion.adapters").extend("copilot", {
 						schema = {
 							model = {
-								default = "gpt-4o",
+								default = "gpt-4.1",
 							},
 						},
 					})
