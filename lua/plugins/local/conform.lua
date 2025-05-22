@@ -41,6 +41,8 @@ return {
 					php = prettier,
 					astro = prettier,
 					mdx = prettier,
+					css = prettier,
+					scss = prettier,
 				},
 				-- Set up format-on-save
 				format_on_save = function(bufnr)
