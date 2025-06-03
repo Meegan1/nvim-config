@@ -94,7 +94,8 @@ return {
 				mode = "n", ---- default terminal mode
 				height = 20,
 			}
-			local toggle_terminal = function()
+
+			local create_terminal = function()
 				local terminal, created = require("snacks").terminal.get(nil, {
 					auto_close = true,
 					auto_insert = false,
@@ -111,7 +112,7 @@ return {
 				-- Throw an error if the terminal is not created
 				if not terminal then
 					require("snacks").notifier.notify("Terminal not created", "error")
-					return
+					return nil, false
 				end
 
 				if created then
@@ -145,7 +146,41 @@ return {
 							end
 						end,
 					})
+				end
 
+				return terminal, created
+			end
+
+			local show_terminal = function()
+				local terminal, created = create_terminal()
+
+				-- Throw an error if the terminal is not created
+				if not terminal then
+					require("snacks").notifier.notify("Terminal not created", "error")
+					return
+				end
+
+				if created then
+					terminal:focus()
+				else
+					terminal:show()
+					vim.api.nvim_win_set_height(terminal.win, terminal_context.height)
+					terminal:focus()
+				end
+
+				return terminal
+			end
+
+			local toggle_terminal = function()
+				local terminal, created = create_terminal()
+
+				-- Throw an error if the terminal is not created
+				if not terminal then
+					require("snacks").notifier.notify("Terminal not created", "error")
+					return
+				end
+
+				if created then
 					terminal:focus()
 				else
 					if terminal:valid() then
@@ -162,6 +197,57 @@ return {
 
 			vim.keymap.set({ "n", "i", "v", "t" }, "<C-j>", function()
 				toggle_terminal()
+			end, { noremap = true, silent = true })
+
+			-- Set terminal to selected/open file
+			local set_terminal_to_file = function()
+				local cwd
+				local ft = vim.bo.filetype
+				if ft == "oil" then
+					local oil = require("oil")
+					local entry = oil.get_cursor_entry()
+					if not entry then
+						vim.notify("No entry selected", vim.log.levels.WARN)
+						return
+					end
+					local path = oil.get_current_dir() .. entry.name
+					local stat = vim.loop.fs_stat(path)
+					if stat and stat.type == "directory" then
+						cwd = path
+					else
+						cwd = vim.fn.fnamemodify(path, ":h")
+					end
+				else
+					local file = vim.api.nvim_buf_get_name(0)
+					if file == "" then
+						cwd = vim.fn.getcwd()
+					else
+						local stat = vim.loop.fs_stat(file)
+						if stat and stat.type == "directory" then
+							cwd = file
+						else
+							cwd = vim.fn.fnamemodify(file, ":h")
+						end
+					end
+				end
+				local terminal = show_terminal()
+				if terminal then
+					local ok, channel_id = pcall(vim.api.nvim_buf_get_var, terminal.buf, "terminal_job_id")
+					if ok and channel_id then
+						vim.api.nvim_chan_send(channel_id, "cd " .. cwd .. "\n")
+						vim.api.nvim_chan_send(channel_id, "clear\n")
+					else
+						require("snacks").notifier.notify("Terminal not created", "error")
+						return
+					end
+					terminal:focus()
+				else
+					require("snacks").notifier.notify("Terminal not created", "error")
+				end
+			end
+
+			vim.keymap.set({ "n", "i", "v", "t" }, "<leader>ot", function()
+				set_terminal_to_file()
 			end, { noremap = true, silent = true })
 		end,
 	},
