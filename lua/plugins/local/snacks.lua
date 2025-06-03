@@ -246,7 +246,7 @@ return {
 				end
 			end
 
-			vim.keymap.set({ "n", "i", "v", "t" }, "<leader>ot", function()
+			vim.keymap.set({ "n" }, "<leader>ot", function()
 				set_terminal_to_file()
 			end, { noremap = true, silent = true })
 		end,
