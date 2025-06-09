@@ -103,7 +103,7 @@ return {
 			local ensure_installed = {
 				"lua_ls",
 				"ts_ls",
-				"intelephense",
+				"phpactor",
 				"tailwindcss",
 				"yamlls",
 				"jsonls",
@@ -127,6 +127,7 @@ return {
 			require("mason-lspconfig").setup({
 				-- LSP servers to ensure are installed
 				ensure_installed = ensure_installed,
+				automatic_enable = true,
 				handlers = {
 					-- this first function is the "default handler"
 					-- it applies to every language server without a "custom handler"
