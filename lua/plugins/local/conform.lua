@@ -43,6 +43,7 @@ return {
 					mdx = prettier,
 					css = prettier,
 					scss = prettier,
+					tex = { "tex-fmt" },
 				},
 				-- Set up format-on-save
 				format_on_save = function(bufnr)
