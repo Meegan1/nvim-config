@@ -2,8 +2,12 @@ return {
 	{
 		"Davidyz/VectorCode",
 		version = "*", -- optional, depending on whether you're on nightly or release
-		dependencies = { "nvim-lua/plenary.nvim" },
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+			"console_log",
+		},
 		config = function(_, opts)
+			local console_log = require("console_log")
 			local Job = require("plenary.job")
 			local async = require("plenary.async")
 			local path = require("plenary.path")
@@ -17,7 +21,7 @@ return {
 						local has_uv = return_val == 0
 						if not has_uv then
 							vim.schedule(function()
-								vim.notify(
+								console_log.log(
 									"uv is not installed, skipping install. Please install uv first.",
 									vim.log.levels.INFO
 								)
@@ -35,32 +39,33 @@ return {
 
 								vim.schedule(function()
 									if not is_installed then
-										vim.notify("Installing VectorCode...", vim.log.levels.INFO)
+										console_log.log("Installing VectorCode...", vim.log.levels.INFO)
 									else
-										vim.notify("Updating VectorCode...", vim.log.levels.INFO)
+										console_log.log("Updating VectorCode...", vim.log.levels.INFO)
 									end
 								end)
 
 								-- Install or update vectorcode
-								Job
-									:new({
-										command = "uv",
-										args = { "tool", "install", "--upgrade", "vectorcode" },
-										on_exit = function(_, return_val)
-											if return_val ~= 0 then
-												vim.schedule(function()
-													vim.notify("Failed to install VectorCode", vim.log.levels.ERROR)
-												end)
-												callback(false)
-											else
-												vim.schedule(function()
-													vim.notify("VectorCode installed successfully", vim.log.levels.INFO)
-												end)
-												callback(true)
-											end
-										end,
-									})
-									:start()
+								Job:new({
+									command = "uv",
+									args = { "tool", "install", "--upgrade", "vectorcode" },
+									on_exit = function(_, return_val)
+										if return_val ~= 0 then
+											vim.schedule(function()
+												console_log.log("Failed to install VectorCode", vim.log.levels.ERROR)
+											end)
+											callback(false)
+										else
+											vim.schedule(function()
+												console_log.log(
+													"VectorCode installed successfully",
+													vim.log.levels.INFO
+												)
+											end)
+											callback(true)
+										end
+									end,
+								}):start()
 							end,
 						}):start()
 					end,
@@ -78,7 +83,7 @@ return {
 
 						if status_code and status_code >= 200 and status_code < 300 then
 							vim.schedule(function()
-								vim.notify("Chroma DB server found on localhost:8000", vim.log.levels.INFO)
+								console_log.log("Chroma DB server found on localhost:8000", vim.log.levels.INFO)
 							end)
 							callback("localhost", "8000")
 							return
@@ -101,7 +106,7 @@ return {
 
 								if status_code2 and status_code2 >= 200 and status_code2 < 300 then
 									vim.schedule(function()
-										vim.notify(
+										console_log.log(
 											"Chroma DB server found on host.docker.internal:8000",
 											vim.log.levels.INFO
 										)
@@ -109,7 +114,7 @@ return {
 									callback("host.docker.internal", "8000")
 								else
 									vim.schedule(function()
-										vim.notify("No Chroma DB server found", vim.log.levels.WARN)
+										console_log.log("No Chroma DB server found", vim.log.levels.INFO)
 									end)
 									callback(nil, nil)
 								end
@@ -159,7 +164,7 @@ return {
 					-- Write the updated config back to file
 					local json_str = vim.json.encode(config)
 					config_file:write(json_str, "w")
-					vim.notify("Updated " .. config_file.filename .. " with server details", vim.log.levels.INFO)
+					console_log.log("Updated " .. config_file.filename .. " with server details", vim.log.levels.INFO)
 				end
 			end
 
@@ -185,7 +190,7 @@ return {
 			end, function(err)
 				if err then
 					vim.schedule(function()
-						vim.notify("Error in VectorCode initialization: " .. tostring(err), vim.log.levels.ERROR)
+						console_log.log("Error in VectorCode initialization: " .. tostring(err), vim.log.levels.ERROR)
 					end)
 				end
 			end)

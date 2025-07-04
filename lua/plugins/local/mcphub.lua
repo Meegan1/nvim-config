@@ -4,8 +4,10 @@ return {
 		dependencies = {
 			"nvim-lua/plenary.nvim", -- Required for Job and HTTP requests
 			"ibhagwan/fzf-lua", -- For config file selection
+			"console_log",
 		},
 		config = function()
+			local console_log = require("console_log")
 			local Job = require("plenary.job")
 			local async = require("plenary.async")
 			local Path = require("plenary.path")
@@ -45,7 +47,7 @@ return {
 
 						if not is_installed then
 							vim.schedule(function()
-								vim.notify("Installing mcp-hub...", vim.log.levels.INFO)
+								console_log.log("Installing mcp-hub...", vim.log.levels.INFO)
 							end)
 
 							-- Check if bun is available
@@ -65,12 +67,15 @@ return {
 											on_exit = function(_, return_val)
 												if return_val ~= 0 then
 													vim.schedule(function()
-														vim.notify("Failed to install mcp-hub", vim.log.levels.ERROR)
+														console_log.log(
+															"Failed to install mcp-hub",
+															vim.log.levels.ERROR
+														)
 													end)
 													callback(false)
 												else
 													vim.schedule(function()
-														vim.notify(
+														console_log.log(
 															"mcp-hub installed successfully",
 															vim.log.levels.INFO
 														)
@@ -109,7 +114,7 @@ return {
 					local temp = io.open(temp_file, "w")
 
 					if not temp then
-						vim.notify("Failed to create temporary file", vim.log.levels.ERROR)
+						console_log.log("Failed to create temporary file", vim.log.levels.ERROR)
 						return json_str
 					end
 
@@ -129,7 +134,7 @@ return {
 			utils.create_config = function(path)
 				local file = io.open(path, "w")
 				if not file then
-					vim.notify("Failed to create config file", vim.log.levels.ERROR)
+					console_log.log("Failed to create config file", vim.log.levels.ERROR)
 					return false
 				end
 
@@ -139,7 +144,7 @@ return {
 
 				file:close()
 
-				vim.notify("Created MCP config at " .. path, vim.log.levels.INFO)
+				console_log.log("Created MCP config at " .. path, vim.log.levels.INFO)
 				return true
 			end
 
@@ -169,7 +174,10 @@ return {
 						prefix = "MCPHub",
 					},
 				})
-				vim.notify("MCP Hub started on port " .. port .. " with config: " .. config_path, vim.log.levels.INFO)
+				console_log.log(
+					"MCP Hub started on port " .. port .. " with config: " .. config_path,
+					vim.log.levels.INFO
+				)
 				return true
 			end
 
@@ -214,7 +222,7 @@ return {
 				local config_path = utils.get_config_path()
 
 				if utils.config_exists(config_path) then
-					vim.notify(
+					console_log.log(
 						"Found MCP config file in current directory, starting automatically",
 						vim.log.levels.INFO
 					)
@@ -230,7 +238,7 @@ return {
 					default = 1,
 				}, function(choice)
 					if choice == nil then
-						vim.notify("MCP Hub " .. action_name .. " canceled", vim.log.levels.INFO)
+						console_log.log("MCP Hub " .. action_name .. " canceled", vim.log.levels.INFO)
 						return
 					elseif choice == "Yes (use current directory)" then
 						core.use_local_config()
@@ -255,14 +263,14 @@ return {
 
 			vim.api.nvim_create_user_command("MCPStop", function()
 				mcphub.get_hub_instance():stop()
-				vim.notify("MCP Hub stopped", vim.log.levels.INFO)
+				console_log.log("MCP Hub stopped", vim.log.levels.INFO)
 			end, { desc = "Stop MCP Hub server" })
 
 			vim.api.nvim_create_user_command("MCPCreate", function()
 				local config_path = utils.get_config_path()
 
 				if utils.config_exists(config_path) then
-					vim.notify("Config file already exists at " .. config_path, vim.log.levels.INFO)
+					console_log.log("Config file already exists at " .. config_path, vim.log.levels.INFO)
 					return
 				end
 
@@ -292,14 +300,17 @@ return {
 
 							vim.api.nvim_create_user_command("MCPStop", function()
 								mcphub.get_hub_instance():stop()
-								vim.notify("MCP Hub stopped", vim.log.levels.INFO)
+								console_log.log("MCP Hub stopped", vim.log.levels.INFO)
 							end, { desc = "Stop MCP Hub server" })
 
 							vim.api.nvim_create_user_command("MCPCreate", function()
 								local config_path = utils.get_config_path()
 
 								if utils.config_exists(config_path) then
-									vim.notify("Config file already exists at " .. config_path, vim.log.levels.INFO)
+									console_log.log(
+										"Config file already exists at " .. config_path,
+										vim.log.levels.INFO
+									)
 									return
 								end
 
@@ -311,7 +322,7 @@ return {
 			end, function(err)
 				if err then
 					vim.schedule(function()
-						vim.notify("Error in MCP Hub initialization: " .. tostring(err), vim.log.levels.ERROR)
+						console_log.log("Error in MCP Hub initialization: " .. tostring(err), vim.log.levels.ERROR)
 					end)
 				end
 			end)
