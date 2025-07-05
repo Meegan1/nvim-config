@@ -116,7 +116,48 @@ return {
 
 			-- Setup nixd for nix files if nixd is installed
 			if vim.fn.executable("nixd") == 1 then
-				require("lspconfig").nixd.setup({})
+				local function get_nixd_settings()
+					local sysname = vim.loop.os_uname().sysname
+					local username = os.getenv("USER")
+
+					local home_manager_expr
+					if sysname == "Darwin" then
+						local hostname = "macbook"
+						home_manager_expr = string.format(
+							"(builtins.getFlake (builtins.toString ./.)).darwinConfigurations.%s.options.home-manager.users.type.getSubOptions []",
+							hostname
+						)
+					elseif sysname == "Linux" then
+						local hostname = "nixos"
+						home_manager_expr = string.format(
+							"(builtins.getFlake (builtins.toString ./.)).nixosConfigurations.%s.options.home-manager.users.%s.type.getSubOptions []",
+							hostname,
+							username
+						)
+					end
+
+					local options = {
+						home_manager = { expr = home_manager_expr },
+					}
+					if sysname == "Linux" then
+						options.nixos = {
+							expr = '(builtins.getFlake ("git+file://" + toString ./.)).nixosConfigurations.nixos.options',
+						}
+					end
+
+					return {
+						nixpkgs = { expr = "import <nixpkgs> { }" },
+						formatting = { command = { "nixfmt" } },
+						options = options,
+					}
+				end
+
+				require("lspconfig").nixd.setup({
+					cmd = { "nixd" },
+					settings = {
+						nixd = get_nixd_settings(),
+					},
+				})
 			end
 
 			-- if helm is installed, add helm_ls to ensure_installed
