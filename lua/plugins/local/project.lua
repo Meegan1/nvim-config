@@ -4,8 +4,12 @@ return {
 		requires = {
 			"ibhagwan/fzf-lua",
 		},
-		config = function()
-			require("project_nvim").setup()
+		enabled = false,
+		options = {
+			patterns = { ".git" },
+		},
+		config = function(_, opts)
+			require("project_nvim").setup(opts)
 
 			local fzf_lua = require("fzf-lua")
 			vim.keymap.set("n", "<leader>fp", function()
