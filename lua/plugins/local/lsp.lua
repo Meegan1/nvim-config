@@ -102,7 +102,6 @@ return {
 
 			local ensure_installed = {
 				"lua_ls",
-				"ts_ls",
 				"phpactor",
 				"tailwindcss",
 				"yamlls",
