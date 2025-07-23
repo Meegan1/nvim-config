@@ -41,7 +41,7 @@
   "neo-tree.nvim": { "branch": "v3.x", "commit": "e96fd85bf18bc345dab332b345098fa5460dffac" },
   "neogit": { "branch": "master", "commit": "59725524d25f9a8a9474f113d60db52bad8504d0" },
   "neotest": { "branch": "master", "commit": "1d4b3bd89afa8bfa12fffd2bb1ccd26ac3c92ce5" },
-  "neotest-vitest": { "branch": "main", "commit": "a6099e1fb55a2c2851da3dd0f4d510af9a234c92" },
+  "neotest-vitest": { "branch": "phallguy/escape-from-zsh", "commit": "46bfeaf6dcd4880d689d26debc06010cadc627ab" },
   "noice.nvim": { "branch": "main", "commit": "0427460c2d7f673ad60eb02b35f5e9926cf67c59" },
   "none-ls.nvim": { "branch": "main", "commit": "db2a48b79cfcdab8baa5d3f37f21c78b6705c62e" },
   "nui.nvim": { "branch": "main", "commit": "de740991c12411b663994b2860f1a4fd0937c130" },
