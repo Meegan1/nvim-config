@@ -2,11 +2,11 @@ return {
 	{
 		"pmizio/typescript-tools.nvim",
 		requires = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
-		opts = {},
-		config = function()
+		opts = function()
 			local capabilities = require("blink.cmp").get_lsp_capabilities()
 
-			require("typescript-tools").setup({
+			return {
+
 				capabilities = capabilities,
 				on_attach = function(client, bufnr)
 					-- inlay hints
@@ -26,7 +26,10 @@ return {
 						includeInlayEnumMemberValueHints = true,
 					},
 				},
-			})
+			}
+		end,
+		config = function(_, opts)
+			require("typescript-tools").setup(opts)
 
 			-- Remove unused imports
 			vim.keymap.set("n", "<leader>ir", function()
