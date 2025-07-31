@@ -1,13 +1,20 @@
 {
   "mcpServers": {
+    "context7": {
+      "args": ["-y", "@upstash/context7-mcp"],
+      "command": "npx",
+      "env": {
+        "DEFAULT_MINIMUM_TOKENS": "10000"
+      }
+    },
     "fetch": {
-      "disabled": false,
+      "args": ["mcp-server-fetch"],
       "command": "uvx",
-      "args": ["mcp-server-fetch"]
+      "disabled": false
     },
     "filesystem": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-filesystem", "."]
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "."],
+      "command": "npx"
     }
   },
   "nativeMCPServers": []
