@@ -230,7 +230,7 @@ return {
 				settings = {
 					intelephense = {
 						files = {
-							maxSize = 100000000, -- 10MB
+							maxSize = 10000000,
 							exclude = {
 								"**/.git/**",
 								"**/.svn/**",
