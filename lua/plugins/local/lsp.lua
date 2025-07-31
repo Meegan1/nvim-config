@@ -31,32 +31,15 @@ return {
 			})
 		end,
 	},
-	{ "williamboman/mason-lspconfig.nvim" },
-	{
-		"VonHeikemen/lsp-zero.nvim",
-		branch = "v3.x",
-		lazy = true,
-		config = false,
-		init = function()
-			-- Disable automatic setup, we are doing it manually
-			vim.g.lsp_zero_extend_cmp = 0
-			vim.g.lsp_zero_extend_lspconfig = 0
-		end,
-	},
+	{ "mason-org/mason-lspconfig.nvim" },
 	{
 		"neovim/nvim-lspconfig",
 		cmd = { "LspInfo", "LspInstall", "LspStart" },
 		event = { "BufReadPre", "BufNewFile" },
 		dependencies = {
-			{ "williamboman/mason-lspconfig.nvim" },
-			{ "folke/which-key.nvim" },
+			{ "mason-org/mason-lspconfig.nvim" },
 		},
 		config = function()
-			-- This is where all the LSP shenanigans will live
-			local lsp_zero = require("lsp-zero")
-			lsp_zero.extend_lspconfig()
-			local whichkey = require("which-key")
-
 			vim.keymap.set("n", "gl", vim.diagnostic.open_float, { desc = "Open LSP diagnostic float" })
 			vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Goto previous LSP Diagnostic" })
 			vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Goto next LSP Diagnostic" })
@@ -100,19 +83,6 @@ return {
 				end, { buffer = bufnr, desc = "Close hover doc" }),
 			})
 
-			local ensure_installed = {
-				"lua_ls",
-				"phpactor",
-				"tailwindcss",
-				"yamlls",
-				"jsonls",
-				"shopify_theme_ls",
-				"twiggy_language_server",
-				"astro",
-				"ast_grep",
-				"mdx_analyzer",
-			}
-
 			-- Setup nixd for nix files if nixd is installed
 			if vim.fn.executable("nixd") == 1 then
 				local function get_nixd_settings()
@@ -151,13 +121,147 @@ return {
 					}
 				end
 
-				require("lspconfig").nixd.setup({
+				vim.lsp.config("nixd", {
 					cmd = { "nixd" },
 					settings = {
 						nixd = get_nixd_settings(),
 					},
+					root_markers = { ".git", "flake.nix", "nixpkgs.json", "shell.nix", "default.nix" },
 				})
 			end
+
+			local tslsInlayHints = {
+				includeInlayParameterNameHints = "all", -- 'none' | 'literals' | 'all'
+				includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+				includeInlayVariableTypeHints = false,
+				includeInlayFunctionParameterTypeHints = true,
+				includeInlayVariableTypeHintsWhenTypeMatchesName = false,
+				includeInlayPropertyDeclarationTypeHints = true,
+				includeInlayFunctionLikeReturnTypeHints = false,
+				includeInlayEnumMemberValueHints = true,
+			}
+			vim.lsp.config("ts_ls", {
+				settings = {
+					typescript = {
+						inlayHints = tslsInlayHints,
+					},
+					javascript = {
+						inlayHints = tslsInlayHints,
+					},
+				},
+				root_markers = { ".git", "package.json" },
+			})
+
+			vim.lsp.config("yamlls", {
+				settings = {
+					yaml = {
+						schemas = {
+							kubernetes = "templates/**",
+							["http://json.schemastore.org/github-workflow"] = ".github/workflows/*",
+							["http://json.schemastore.org/github-action"] = ".github/action.{yml,yaml}",
+							["http://json.schemastore.org/prettierrc"] = ".prettierrc.{yml,yaml}",
+							["http://json.schemastore.org/kustomization"] = "kustomization.{yml,yaml}",
+							["http://json.schemastore.org/chart"] = "Chart.{yml,yaml}",
+						},
+					},
+				},
+				root_markers = { ".git", "package.json", "kustomization.yaml", "Chart.yaml" },
+			})
+
+			vim.lsp.config("jsonls", {
+				settings = {
+					json = {
+						schemas = require("schemastore").json.schemas(),
+						validate = { enable = true },
+					},
+				},
+				root_markers = { ".git", "package.json" },
+			})
+
+			vim.lsp.config("helm_ls", {
+				settings = {
+					["helm-ls"] = {
+						yamlls = {
+							path = "yaml-language-server",
+						},
+					},
+				},
+				root_markers = { "Chart.yaml" },
+			})
+
+			vim.lsp.config("twiggy_language_server", {
+				maxFileSize = 10000000,
+				settings = {
+					twiggy = {
+						autoInsertSpaces = true,
+						inlayHints = {
+							macro = true,
+							block = true,
+							macroArguments = true,
+						},
+						phpExecutable = "php",
+						symfonyConsolePath = "./bin/console",
+						vanillaTwigEnvironmentPath = "",
+						framework = "craft",
+						diagnostics = {
+							twigCsFixer = true,
+						},
+					},
+				},
+				root_markers = { ".git", "composer.json" },
+			})
+
+			vim.lsp.config("ast_grep", {
+				cmd = { "ast-grep", "lsp" },
+				single_file_support = false,
+				root_markers = { "sgconfig.yml" },
+			})
+
+			vim.lsp.config("mdx_analyzer", {
+				init_options = {
+					typescript = {
+						enabled = true,
+					},
+				},
+				root_markers = { ".git", "package.json" },
+			})
+
+			vim.lsp.config("intelephense", {
+				settings = {
+					intelephense = {
+						files = {
+							maxSize = 100000000, -- 10MB
+							exclude = {
+								"**/.git/**",
+								"**/.svn/**",
+								"**/.hg/**",
+								"**/CVS/**",
+								"**/.DS_Store/**",
+								"**/node_modules/**",
+								"**/bower_components/**",
+								"**/vendor/**/{Tests,tests}/**",
+								"**/.history/**",
+								"**/vendor/**/vendor/**",
+								"**/.devenv*/**",
+							},
+						},
+					},
+				},
+				root_markers = { ".git", "composer.json" },
+			})
+
+			local ensure_installed = {
+				"lua_ls",
+				"intelephense",
+				"tailwindcss",
+				"yamlls",
+				"jsonls",
+				"shopify_theme_ls",
+				"twiggy_language_server",
+				"astro",
+				"ast_grep",
+				"mdx_analyzer",
+			}
 
 			-- if helm is installed, add helm_ls to ensure_installed
 			if vim.fn.has("helm") == 1 then
@@ -168,132 +272,6 @@ return {
 				-- LSP servers to ensure are installed
 				ensure_installed = ensure_installed,
 				automatic_enable = true,
-				handlers = {
-					-- this first function is the "default handler"
-					-- it applies to every language server without a "custom handler"
-					function(server_name)
-						local capabilities = require("blink.cmp").get_lsp_capabilities()
-
-						local opts = {
-							capabilities = capabilities,
-							on_attach = function(client, bufnr)
-								-- inlay hints
-								if vim.fn.has("nvim-0.10") == 1 then
-									vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
-								end
-							end,
-							root_dir = require("lspconfig/util").root_pattern(".git", "package.json") or vim.loop.cwd(),
-						}
-
-						if server_name == "ts_ls" then
-							local inlayHints = {
-								includeInlayParameterNameHints = "all", -- 'none' | 'literals' | 'all'
-								includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-								includeInlayVariableTypeHints = false,
-								includeInlayFunctionParameterTypeHints = true,
-								includeInlayVariableTypeHintsWhenTypeMatchesName = false,
-								includeInlayPropertyDeclarationTypeHints = true,
-								includeInlayFunctionLikeReturnTypeHints = false,
-								includeInlayEnumMemberValueHints = true,
-							}
-
-							opts = vim.tbl_extend("force", opts, {
-								settings = {
-									typescript = {
-										inlayHints = inlayHints,
-									},
-									javascript = {
-										inlayHints = inlayHints,
-									},
-								},
-							})
-							return -- skip ts_ls
-						end
-
-						if server_name == "yamlls" then
-							opts = vim.tbl_extend("force", opts, {
-								settings = {
-									yaml = {
-										schemas = {
-											kubernetes = "templates/**",
-											["http://json.schemastore.org/github-workflow"] = ".github/workflows/*",
-											["http://json.schemastore.org/github-action"] = ".github/action.{yml,yaml}",
-											["http://json.schemastore.org/prettierrc"] = ".prettierrc.{yml,yaml}",
-											["http://json.schemastore.org/kustomization"] = "kustomization.{yml,yaml}",
-											["http://json.schemastore.org/chart"] = "Chart.{yml,yaml}",
-										},
-									},
-								},
-							})
-						end
-
-						if server_name == "jsonls" then
-							opts = vim.tbl_extend("force", opts, {
-								settings = {
-									json = {
-										schemas = require("schemastore").json.schemas(),
-										validate = { enable = true },
-									},
-								},
-							})
-						end
-
-						if server_name == "helm_ls" then
-							opts = vim.tbl_extend("force", opts, {
-								settings = {
-									["helm-ls"] = {
-										yamlls = {
-											path = "yaml-language-server",
-										},
-									},
-								},
-							})
-						end
-
-						if server_name == "twiggy_language_server" then
-							opts = vim.tbl_extend("force", opts, {
-								maxFileSize = 10000000,
-								settings = {
-									twiggy = {
-										autoInsertSpaces = true,
-										inlayHints = {
-											macro = true,
-											block = true,
-											macroArguments = true,
-										},
-										phpExecutable = "php",
-										symfonyConsolePath = "./bin/console",
-										vanillaTwigEnvironmentPath = "",
-										framework = "craft",
-										diagnostics = {
-											twigCsFixer = true,
-										},
-									},
-								},
-							})
-						end
-
-						if server_name == "ast_grep" then
-							opts = vim.tbl_extend("force", opts, {
-								cmd = { "ast-grep", "lsp" },
-								single_file_support = false,
-								root_dir = require("lspconfig/util").root_pattern("sgconfig.yml"),
-							})
-						end
-
-						if server_name == "mdx_analyzer" then
-							opts = vim.tbl_extend("force", opts, {
-								init_options = {
-									typescript = {
-										enabled = true,
-									},
-								},
-							})
-						end
-
-						require("lspconfig")[server_name].setup(opts)
-					end,
-				},
 			})
 		end,
 	},
