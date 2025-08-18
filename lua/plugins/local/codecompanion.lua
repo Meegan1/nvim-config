@@ -30,7 +30,7 @@ return {
 		local copilot_adapter = require("codecompanion.adapters").extend("copilot", {
 			schema = {
 				model = {
-					default = "gpt-4.1",
+					default = "gpt-5-mini",
 				},
 			},
 		})
@@ -38,13 +38,7 @@ return {
 		require("codecompanion").setup(vim.tbl_extend("force", {
 			adapters = {
 				copilot = function()
-					return require("codecompanion.adapters").extend("copilot", {
-						schema = {
-							model = {
-								default = "gpt-4.1",
-							},
-						},
-					})
+					return copilot_adapter
 				end,
 			},
 			strategies = {
