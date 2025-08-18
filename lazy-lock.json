@@ -8,6 +8,7 @@
   "auto-session": { "branch": "main", "commit": "c93a9bfd8a5cbf931a6ead5c824998da874b9f79" },
   "barbar.nvim": { "branch": "master", "commit": "20f26c940991c528c5e3c6d0d82a6dc1a82b9d4c" },
   "blink.cmp": { "branch": "main", "commit": "bae4bae0eedd1fa55f34b685862e94a222d5c6f8" },
+  "codecompanion-history.nvim": { "branch": "main", "commit": "336987afe9aca1fca30c20ca27dc91e1f7690c77" },
   "codecompanion.nvim": { "branch": "main", "commit": "3d4d85f03acc3a31ea2ec9bd34db5194ed7696ff" },
   "conform.nvim": { "branch": "master", "commit": "973f3cb73887d510321653044791d7937c7ec0fa" },
   "copilot-lualine": { "branch": "main", "commit": "6bc29ba1fcf8f0f9ba1f0eacec2f178d9be49333" },
