@@ -1,6 +1,7 @@
 return {
 	{
 		"pmizio/typescript-tools.nvim",
+		enabled = false,
 		requires = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
 		opts = function()
 			local capabilities = require("blink.cmp").get_lsp_capabilities()

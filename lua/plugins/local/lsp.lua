@@ -141,6 +141,109 @@ return {
 				includeInlayEnumMemberValueHints = true,
 			}
 			vim.lsp.config("ts_ls", {
+				init_options = { hostInfo = "neovim" },
+				cmd = { "typescript-language-server", "--stdio" },
+				filetypes = {
+					"javascript",
+					"javascriptreact",
+					"javascript.jsx",
+					"typescript",
+					"typescriptreact",
+					"typescript.tsx",
+				},
+				root_markers = { "tsconfig.json", "jsconfig.json", "package.json", ".git" },
+				handlers = {
+					-- handle rename request for certain code actions like extracting functions / types
+					["_typescript.rename"] = function(_, result, ctx)
+						local client = assert(vim.lsp.get_client_by_id(ctx.client_id))
+						vim.lsp.util.show_document({
+							uri = result.textDocument.uri,
+							range = {
+								start = result.position,
+								["end"] = result.position,
+							},
+						}, client.offset_encoding)
+						vim.lsp.buf.rename()
+						return vim.NIL
+					end,
+				},
+				commands = {
+					["editor.action.showReferences"] = function(command, ctx)
+						local client = assert(vim.lsp.get_client_by_id(ctx.client_id))
+						local file_uri, position, references = unpack(command.arguments)
+
+						local quickfix_items = vim.lsp.util.locations_to_items(references, client.offset_encoding)
+						vim.fn.setqflist({}, " ", {
+							title = command.title,
+							items = quickfix_items,
+							context = {
+								command = command,
+								bufnr = ctx.bufnr,
+							},
+						})
+
+						vim.lsp.util.show_document({
+							uri = file_uri,
+							range = {
+								start = position,
+								["end"] = position,
+							},
+						}, client.offset_encoding)
+
+						vim.cmd("botright copen")
+					end,
+				},
+				on_attach = function(client, bufnr)
+					-- Enable inlay hints if nvim version is 0.10 or higher
+					if vim.fn.has("nvim-0.10") == 1 then
+						vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+					end
+
+					-- ts_ls provides `source.*` code actions that apply to the whole file. These only appear in
+					-- `vim.lsp.buf.code_action()` if specified in `context.only`.
+					vim.api.nvim_buf_create_user_command(bufnr, "LspTypescriptSourceAction", function()
+						local source_actions = vim.tbl_filter(function(action)
+							vim.notify(action)
+							return vim.startswith(action, "source.")
+						end, client.server_capabilities.codeActionProvider.codeActionKinds)
+						vim.notify(vim.inspect(source_actions))
+
+						vim.lsp.buf.code_action({
+							context = {
+								diagnostics = {},
+								only = source_actions,
+							},
+						})
+					end, {})
+
+					vim.keymap.set("n", "<leader>ir", function()
+						vim.lsp.buf.code_action({
+							context = {
+								diagnostics = {},
+								---@diagnostic disable-next-line: assign-type-mismatch
+								only = { "source.removeUnused.ts" },
+							},
+							apply = true,
+						})
+					end, {
+						desc = "Remove unused imports",
+						buffer = bufnr,
+					})
+
+					vim.keymap.set("n", "<leader>if", function()
+						vim.lsp.buf.code_action({
+							context = {
+								diagnostics = {},
+								---@diagnostic disable-next-line: assign-type-mismatch
+								only = { "source.addMissingImports.ts" },
+							},
+							apply = true,
+						})
+					end, {
+						desc = "Fix imports",
+						buffer = bufnr,
+					})
+				end,
 				settings = {
 					typescript = {
 						inlayHints = tslsInlayHints,
@@ -149,7 +252,6 @@ return {
 						inlayHints = tslsInlayHints,
 					},
 				},
-				root_markers = { ".git", "package.json" },
 			})
 
 			vim.lsp.config("yamlls", {
@@ -261,6 +363,7 @@ return {
 				"astro",
 				"ast_grep",
 				"mdx_analyzer",
+				"ts_ls",
 			}
 
 			-- if helm is installed, add helm_ls to ensure_installed
