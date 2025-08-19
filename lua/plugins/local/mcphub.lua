@@ -14,28 +14,13 @@ return {
 			local mcphub = require("mcphub")
 
 			-- Constants and default configuration
-			local CONFIG_FILENAME = ".mcpservers.json"
+			local CONFIG_FILES = {
+				".mcphub/servers.json",
+				".vscode/mcp.json",
+				".cursor.mcp.json",
+			}
 			local PORT_RANGE_START = 1024
 			local PORT_RANGE_END = 65535
-			local DEFAULT_CONFIG = {
-				mcpServers = {
-					fetch = {
-						command = "uvx",
-						disabled = false,
-						args = {
-							"mcp-server-fetch",
-						},
-					},
-					["filesystem"] = {
-						command = "npx",
-						args = {
-							"-y",
-							"@modelcontextprotocol/server-filesystem",
-							".",
-						},
-					},
-				},
-			}
 
 			-- Async function to check if mcp-hub is installed
 			local function async_ensure_mcp_hub_installed(callback)
@@ -94,60 +79,6 @@ return {
 				}):start()
 			end
 
-			local utils = {}
-
-			-- Helper utilities
-			-- Get the path to the config file in a specified directory
-			utils.get_config_path = function(dir)
-				return Path:new(dir or vim.fn.getcwd(), CONFIG_FILENAME).filename
-			end
-
-			-- Check if config file exists at the specified path
-			utils.config_exists = function(path)
-				return vim.loop.fs_stat(path) ~= nil
-			end
-
-			utils.get_json_string = function(json)
-				local json_str = vim.json.encode(json)
-				if vim.fn.executable("jq") == 1 then
-					local temp_file = os.tmpname()
-					local temp = io.open(temp_file, "w")
-
-					if not temp then
-						console_log.log("Failed to create temporary file", vim.log.levels.ERROR)
-						return json_str
-					end
-
-					temp:write(json_str)
-					temp:close()
-
-					local formatted_json = vim.fn.system("jq . " .. temp_file)
-					os.remove(temp_file)
-
-					return formatted_json
-				else
-					return json_str
-				end
-			end
-
-			-- Create a default config file at the specified path
-			utils.create_config = function(path)
-				local file = io.open(path, "w")
-				if not file then
-					console_log.log("Failed to create config file", vim.log.levels.ERROR)
-					return false
-				end
-
-				-- Write formatted JSON with proper indentation if jq is available
-				local json_str = utils.get_json_string(DEFAULT_CONFIG)
-				file:write(json_str)
-
-				file:close()
-
-				console_log.log("Created MCP config at " .. path, vim.log.levels.INFO)
-				return true
-			end
-
 			-- Hash the current working directory to generate a unique port
 			local function hash_string(str)
 				local hash = 5381
@@ -157,125 +88,28 @@ return {
 				return hash
 			end
 
-			-- Start MCP Hub with the specified config path
-			utils.start_mcp = function(config_path)
-				local cwd = vim.fn.getcwd()
-				local hashed_cwd = hash_string(cwd)
-				local port = PORT_RANGE_START + (hashed_cwd % (PORT_RANGE_END - PORT_RANGE_START + 1))
+			local cwd = vim.fn.getcwd()
+			local hashed_cwd = hash_string(cwd)
+			local port = PORT_RANGE_START + (hashed_cwd % (PORT_RANGE_END - PORT_RANGE_START + 1))
 
-				mcphub.setup({
-					port = port,
-					config = config_path,
-					shutdown_delay = 0,
-					log = {
-						level = vim.log.levels.ERROR,
-						to_file = false,
-						file_path = nil,
-						prefix = "MCPHub",
-					},
-				})
-				console_log.log(
-					"MCP Hub started on port " .. port .. " with config: " .. config_path,
-					vim.log.levels.INFO
-				)
-				return true
-			end
-
-			-- Core functionality
-			local core = {}
-			-- Use config from the current working directory
-			core.use_local_config = function()
-				local config_path = utils.get_config_path()
-
-				-- Create config if it doesn't exist
-				if not utils.config_exists(config_path) and not utils.create_config(config_path) then
-					return false
-				end
-
-				return utils.start_mcp(config_path)
-			end
-
-			-- Select a directory for the config file using FZF
-			core.select_config_location = function()
-				require("fzf-lua").fzf_exec("find " .. vim.fn.getcwd() .. " -type d", {
-					prompt = "Select directory for config > ",
-					actions = {
-						["default"] = function(selected)
-							if #selected > 0 then
-								local dir_path = selected[1]
-								local config_path = utils.get_config_path(dir_path)
-
-								-- Create config if it doesn't exist
-								if not utils.config_exists(config_path) and not utils.create_config(config_path) then
-									return false
-								end
-
-								utils.start_mcp(config_path)
-							end
-						end,
-					},
-				})
-			end
-
-			-- Auto-detect and start if config exists in current directory
-			core.auto_detect_and_start = function()
-				local config_path = utils.get_config_path()
-
-				if utils.config_exists(config_path) then
-					console_log.log(
-						"Found MCP config file in current directory, starting automatically",
-						vim.log.levels.INFO
-					)
-					return utils.start_mcp(config_path)
-				end
-				return false
-			end
-
-			-- Prompt user to select config method and start MCP Hub
-			core.prompt_and_start = function(action_name)
-				vim.ui.select({ "Yes (use current directory)", "No (pick a location)" }, {
-					prompt = "Do you want to use a local " .. CONFIG_FILENAME .. "?",
-					default = 1,
-				}, function(choice)
-					if choice == nil then
-						console_log.log("MCP Hub " .. action_name .. " canceled", vim.log.levels.INFO)
-						return
-					elseif choice == "Yes (use current directory)" then
-						core.use_local_config()
-					else
-						core.select_config_location()
+			-- Helper: search cwd and ancestors for any of the CONFIG_FILES
+			local function find_config_in_ancestors(files)
+				local dir = vim.fn.getcwd()
+				while true do
+					local p = Path:new(dir)
+					for _, f in ipairs(files) do
+						if Path:new(dir, f):exists() then
+							return Path:new(dir, f):absolute()
+						end
 					end
-				end)
-			end
-
-			-- Try to auto-start, otherwise define commands
-			if not core.auto_detect_and_start() then
-				vim.api.nvim_create_user_command("MCPStart", function()
-					core.prompt_and_start("startup")
-				end, { desc = "Start MCP Hub server with configuration options" })
-			end
-
-			-- Always define these commands regardless of auto-start
-			vim.api.nvim_create_user_command("MCPRestart", function()
-				mcphub.get_hub_instance():stop()
-				mcphub.get_hub_instance():start()
-			end, { desc = "Restart MCP Hub server with configuration options" })
-
-			vim.api.nvim_create_user_command("MCPStop", function()
-				mcphub.get_hub_instance():stop()
-				console_log.log("MCP Hub stopped", vim.log.levels.INFO)
-			end, { desc = "Stop MCP Hub server" })
-
-			vim.api.nvim_create_user_command("MCPCreate", function()
-				local config_path = utils.get_config_path()
-
-				if utils.config_exists(config_path) then
-					console_log.log("Config file already exists at " .. config_path, vim.log.levels.INFO)
-					return
+					local parent = p:parent().filename
+					if parent == dir or parent == "" then
+						break
+					end
+					dir = parent
 				end
-
-				utils.create_config(config_path)
-			end, { desc = "Create a new MCP config file" })
+				return nil
+			end
 
 			-- Start async initialization
 			async.run(function()
@@ -286,36 +120,47 @@ return {
 				async_ensure_mcp_hub_installed(function(is_installed)
 					if is_installed then
 						vim.schedule(function()
-							if not core.auto_detect_and_start() then
-								vim.api.nvim_create_user_command("MCPStart", function()
-									core.prompt_and_start("startup")
-								end, { desc = "Start MCP Hub server with configuration options" })
-							end
+							vim.api.nvim_create_user_command("MCPStart", function()
+								mcphub.setup({ port = port })
+							end, { desc = "Start MCP Hub server" })
 
 							-- Always define these commands regardless of auto-start
 							vim.api.nvim_create_user_command("MCPRestart", function()
 								mcphub.get_hub_instance():stop()
 								mcphub.get_hub_instance():start()
-							end, { desc = "Restart MCP Hub server with configuration options" })
+							end, { desc = "Restart MCP Hub server" })
 
 							vim.api.nvim_create_user_command("MCPStop", function()
 								mcphub.get_hub_instance():stop()
 								console_log.log("MCP Hub stopped", vim.log.levels.INFO)
 							end, { desc = "Stop MCP Hub server" })
 
-							vim.api.nvim_create_user_command("MCPCreate", function()
-								local config_path = utils.get_config_path()
-
-								if utils.config_exists(config_path) then
-									console_log.log(
-										"Config file already exists at " .. config_path,
-										vim.log.levels.INFO
-									)
-									return
+							-- keybind to open/start MCP Hub
+							vim.keymap.set("n", "<leader>mh", function()
+								local State = require("mcphub.state")
+								if State.setup_state == "not_started" then
+									require("mcphub").setup({
+										port = port,
+									})
 								end
+								if State.ui_instance then
+									-- UI exists, just toggle it
+									State.ui_instance:toggle()
+								else
+									State.ui_instance = require("mcphub.ui"):new()
+									State.ui_instance:toggle()
+								end
+							end, { desc = "Open/Start MCP Hub", silent = true })
 
-								utils.create_config(config_path)
-							end, { desc = "Create a new MCP config file" })
+							-- Auto-start if any config file is present in cwd or ancestors
+							local cfg_path = find_config_in_ancestors(CONFIG_FILES)
+							if cfg_path then
+								console_log.log(
+									"Found MCP config at " .. cfg_path .. " — auto-starting mcp-hub",
+									vim.log.levels.INFO
+								)
+								mcphub.setup({ port = port })
+							end
 						end)
 					end
 				end)
