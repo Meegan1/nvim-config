@@ -70,6 +70,7 @@ return {
 					["<C-space>"] = { "show", "hide" },
 					["<C-e>"] = { "hide" },
 					["<CR>"] = { "accept", "fallback" },
+					["<C-y>"] = { "accept" },
 
 					["<C-p>"] = { "select_prev", "fallback" },
 					["<C-n>"] = { "select_next", "fallback" },
