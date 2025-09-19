@@ -5,11 +5,7 @@ return {
 			"nvim-neotest/nvim-nio",
 			"nvim-lua/plenary.nvim",
 			"nvim-treesitter/nvim-treesitter",
-
-			-- Fixes issues with vitests not running in zsh
-			-- https://github.com/marilari88/neotest-vitest/pull/58
-			-- https://github.com/marilari88/neotest-vitest/issues/66
-			{ "phallguy/neotest-vitest", branch = "phallguy/escape-from-zsh" },
+			"marilari88/neotest-vitest",
 		},
 
 		opts = function()
