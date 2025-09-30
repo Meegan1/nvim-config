@@ -44,11 +44,11 @@ return {
 				vim.cmd("Git commit")
 			end, { noremap = true, silent = true, desc = "Git commit" })
 
-			vim.keymap.set("n", "<leader>gp", function()
+			vim.keymap.set("n", "<leader>gP", function()
 				vim.cmd("Git! push")
 			end, { noremap = true, silent = true, desc = "Git push" })
 
-			vim.keymap.set("n", "<leader>gl", function()
+			vim.keymap.set("n", "<leader>gp", function()
 				vim.cmd("Git! pull")
 			end, { noremap = true, silent = true, desc = "Git pull" })
 
