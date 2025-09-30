@@ -45,6 +45,9 @@ return {
         end, {
           desc = "Blame line",
         })
+        vim.keymap.set("n", "<leader>gb", function()
+          gitsigns.blame()
+        end, { desc = "Git blame" })
         map("n", "<leader>tb", gitsigns.toggle_current_line_blame, {
           desc = "Toggle current line blame",
         })

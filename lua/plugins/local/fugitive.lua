@@ -36,10 +36,6 @@ return {
 				Fugitive.toggle()
 			end, { noremap = true, silent = true, desc = "Toggle Git status" })
 
-			vim.keymap.set("n", "<leader>gb", function()
-				vim.cmd("Git blame")
-			end, { noremap = true, silent = true, desc = "Git blame" })
-
 			vim.keymap.set("n", "<leader>gc", function()
 				vim.cmd("Git commit")
 			end, { noremap = true, silent = true, desc = "Git commit" })
@@ -55,6 +51,10 @@ return {
 			vim.keymap.set("n", "<leader>gd", function()
 				vim.cmd("Gdiffsplit")
 			end, { noremap = true, silent = true, desc = "Git diff split" })
+
+			vim.keymap.set("n", "<leader>gl", function()
+				vim.cmd("Git log --graph --decorate --all")
+			end, { noremap = true, silent = true, desc = "Git log" })
 		end,
 	},
 }
