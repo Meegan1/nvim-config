@@ -363,6 +363,7 @@ return {
 				"astro",
 				"ast_grep",
 				"mdx_analyzer",
+				"tinymist",
 				"ts_ls",
 			}
 
