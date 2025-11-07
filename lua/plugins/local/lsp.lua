@@ -1,3 +1,5 @@
+local ESC = vim.api.nvim_replace_termcodes("<esc>", true, true, true)
+
 return {
 	{
 		"williamboman/mason.nvim",
@@ -70,17 +72,19 @@ return {
 						vim.lsp.buf.signature_help,
 						{ desc = "Open Signature Help", buffer = bufnr }
 					)
-				end,
 
-				-- bind <Esc> to close the hover buffer
-				vim.keymap.set("n", "<Esc>", function()
-					for _, win in ipairs(vim.api.nvim_list_wins()) do
-						local config = vim.api.nvim_win_get_config(win)
-						if config.relative ~= "" then
-							vim.api.nvim_win_close(win, false)
+					-- bind <Esc> to close hover windows globally
+					vim.on_key(function(key)
+						if key == ESC and (vim.fn.mode() == "n" or vim.fn.mode() == "v") then
+							for _, win in ipairs(vim.api.nvim_list_wins()) do
+								local config = vim.api.nvim_win_get_config(win)
+								if config.relative ~= "" then
+									vim.api.nvim_win_close(win, false)
+								end
+							end
 						end
-					end
-				end, { buffer = bufnr, desc = "Close hover doc" }),
+					end)
+				end,
 			})
 
 			-- Setup nixd for nix files if nixd is installed
@@ -203,10 +207,8 @@ return {
 					-- `vim.lsp.buf.code_action()` if specified in `context.only`.
 					vim.api.nvim_buf_create_user_command(bufnr, "LspTypescriptSourceAction", function()
 						local source_actions = vim.tbl_filter(function(action)
-							vim.notify(action)
 							return vim.startswith(action, "source.")
 						end, client.server_capabilities.codeActionProvider.codeActionKinds)
-						vim.notify(vim.inspect(source_actions))
 
 						vim.lsp.buf.code_action({
 							context = {
