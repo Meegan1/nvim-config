@@ -7,7 +7,10 @@ return {
 			"nvim-tree/nvim-web-devicons",
 		},
 		config = function()
-			require("octo").setup()
+			require("octo").setup({
+				picker = "fzf-lua",
+			})
+
 			local Job = require("plenary.job")
 
 			vim.api.nvim_create_user_command("CheckoutIssue", function(opts)
