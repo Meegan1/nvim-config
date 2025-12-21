@@ -62,7 +62,10 @@ return {
 							return string.format(
 								" %s%s",
 								adapter.formatted_name,
-								adapter.parameters.model and " (" .. adapter.parameters.model .. ")" or ""
+								adapter.parameters
+										and adapter.parameters.model
+										and " (" .. adapter.parameters.model .. ")"
+									or ""
 							)
 						end,
 						user = " " .. "User",
