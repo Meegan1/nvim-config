@@ -38,11 +38,13 @@ return {
 
 		require("codecompanion").setup(vim.tbl_extend("force", {
 			adapters = {
-				copilot = function()
-					return copilot_adapter
-				end,
+				http = {
+					copilot = function()
+						return copilot_adapter
+					end,
+				},
 			},
-			strategies = {
+			interactions = {
 				chat = {
 					adapter = "copilot",
 					slash_commands = {
@@ -195,7 +197,9 @@ return {
 		end, { noremap = true, silent = true, desc = "Open the CodeCompanion actions menu" })
 
 		vim.keymap.set({ "n", "x" }, "<leader>cm", function()
-			local models = copilot_adapter.schema.model.choices(copilot_adapter)
+			local models = copilot_adapter.schema.model.choices(copilot_adapter, {
+				async = false,
+			})
 			local model_names = {}
 			for name, _ in pairs(models) do
 				table.insert(model_names, name)
@@ -211,7 +215,7 @@ return {
 				prompt = "Select model:",
 			}, function(model)
 				if model then
-					Chat:apply_model(model)
+					Chat:apply_model_or_command({ model = model })
 					vim.notify("Model changed to: " .. model)
 				end
 			end)

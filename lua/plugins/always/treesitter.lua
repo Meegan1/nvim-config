@@ -2,10 +2,14 @@ return {
 	{
 		"nvim-treesitter/nvim-treesitter",
 		build = ":TSUpdate",
-		opts_extend = { "ensure_installed" },
-		opts = {
+		lazy = false,
+		opts = {},
+		---@param opts TSConfig
+		config = function(_, opts)
+			require("nvim-treesitter").setup(opts)
+
 			-- Treesitter plugins to ensure are installed
-			ensure_installed = {
+			require("nvim-treesitter").install({
 				"typescript",
 				"javascript",
 				"tsx",
@@ -30,10 +34,8 @@ return {
 				"blade",
 				"twig",
 				"astro",
-			},
-		},
-		---@param opts TSConfig
-		config = function(_, opts)
+			})
+
 			-- Add support for gotmpl filetype and helm templates
 			vim.filetype.add({
 				extension = {
@@ -56,17 +58,16 @@ return {
 				},
 			})
 
-			local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
-			parser_config.blade = {
-				install_info = {
-					url = "https://github.com/EmranMR/tree-sitter-blade",
-					files = { "src/parser.c" },
-					branch = "main",
-				},
-				filetype = "blade",
-			}
-
-			require("nvim-treesitter.configs").setup(opts)
+			-- Automatically start treesitter for specific filetypes
+			vim.api.nvim_create_autocmd("FileType", {
+				pattern = "*",
+				callback = function()
+					local lang = vim.treesitter.language.get_lang(vim.bo.filetype)
+					if lang and pcall(vim.treesitter.language.add, lang) then
+						pcall(vim.treesitter.start)
+					end
+				end,
+			})
 		end,
 	},
 	{
