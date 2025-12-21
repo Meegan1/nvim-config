@@ -6,6 +6,7 @@ return {
 			"nvim-lua/plenary.nvim",
 			"console_log",
 		},
+		enabled = false,
 		config = function(_, opts)
 			local console_log = require("console_log")
 			local Job = require("plenary.job")

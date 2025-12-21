@@ -84,13 +84,13 @@ return {
 						show_results_in_chat = true,
 					},
 				},
-				vectorcode = {
-					opts = {
-						add_tool = true,
-						add_slash_command = true,
-						tool_opts = {},
-					},
-				},
+				-- vectorcode = {
+				-- 	opts = {
+				-- 		add_tool = true,
+				-- 		add_slash_command = true,
+				-- 		tool_opts = {},
+				-- 	},
+				-- },
 				history = {
 					enabled = true,
 					opts = {
