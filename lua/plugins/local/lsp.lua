@@ -132,6 +132,8 @@ return {
 					},
 					root_markers = { ".git", "flake.nix", "nixpkgs.json", "shell.nix", "default.nix" },
 				})
+
+				vim.lsp.enable("nixd")
 			end
 
 			local tslsInlayHints = {
