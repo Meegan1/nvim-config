@@ -5,24 +5,34 @@ return {
 			local devenv = require("utils.dev-env")
 			local file_exists = require("utils.file-exists")
 
-			local prettier = devenv.create_libs_table({
-				devenv.check_lib("dprint", function()
-					return file_exists({
-						"dprint.toml",
-						"dprint.json",
+			local prettier = (
+				file_exists({
+						"biome.json",
+						"biome.toml",
 					})
-				end),
-				devenv.check_lib("prettierd", function()
-					return true
-				end),
-				devenv.check_lib("prettier", function()
-					return true
-				end),
-			}, function(table)
-				table.stop_after_first = true
+					and {
+						"biome",
+						"biome-organize-imports",
+					}
+				or devenv.create_libs_table({
+					devenv.check_lib("dprint", function()
+						return file_exists({
+							"dprint.toml",
+							"dprint.json",
+						})
+					end),
+					devenv.check_lib("prettierd", function()
+						return true
+					end),
+					devenv.check_lib("prettier", function()
+						return true
+					end),
+				}, function(table)
+					table.stop_after_first = true
 
-				return table
-			end)
+					return table
+				end)
+			)
 
 			return {
 				-- Define your formatters
